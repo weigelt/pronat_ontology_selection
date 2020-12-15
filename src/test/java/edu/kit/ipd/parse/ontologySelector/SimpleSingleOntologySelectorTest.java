@@ -6,9 +6,8 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.kit.ipd.parse.ontologySelector.OntologySelector;
 import edu.kit.ipd.parse.topic_extraction_common.Topic;
-import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCommon;
+import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;
 
 /**
  * @author Jan Keim
@@ -17,13 +16,12 @@ import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCommon;
 public class SimpleSingleOntologySelectorTest {
 	// private static final Logger logger = LoggerFactory.getLogger(SimpleSingleOntologySelectorTest.class);
 
-	private static OntologySelector	ontoSelector;
-	private static TopicExtractionCommon	topicExtraction;
+	private static OntologySelector ontoSelector;
+	private static TopicExtractionCore topicExtraction;
 
 	@BeforeClass
 	public static void beforeClass() {
-		topicExtraction = new TopicExtractionCommon();
-		topicExtraction.init();
+		topicExtraction = new TopicExtractionCore();
 
 		ontoSelector = new OntologySelector();
 		ontoSelector.init();
@@ -31,12 +29,12 @@ public class SimpleSingleOntologySelectorTest {
 
 	@Test
 	public void test() {
-		List<String> wordSenses = new ArrayList<>();
+		final List<String> wordSenses = new ArrayList<>();
 		// add disambiguated meanings of words
 		wordSenses.add("radiator");
 
 		// start selection
-		List<Topic> topics = topicExtraction.getTopicsForSenses(wordSenses);
+		final List<Topic> topics = topicExtraction.getTopicsForSenses(wordSenses);
 		ontoSelector.exec(topics);
 	}
 

@@ -21,7 +21,8 @@ import edu.kit.ipd.parse.ner.NERTagger;
 import edu.kit.ipd.parse.ontologySelector.util.TestHelper;
 import edu.kit.ipd.parse.ontologySelector.util.Text;
 import edu.kit.ipd.parse.shallownlp.ShallowNLP;
-import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCommon;
+import edu.kit.ipd.parse.topic_extraction.TopicExtraction;
+import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;
 import edu.kit.ipd.parse.wikiWSD.WordSenseDisambiguation;
 
 /**
@@ -33,12 +34,13 @@ public class OntologySelectorTest {
 	private static final Logger logger = LoggerFactory.getLogger(OntologySelectorTest.class);
 
 	private static OntologySelector ontoSelector;
-	private static TopicExtractionCommon topicExtraction;
+	private static TopicExtraction topicExtraction;
 	private static HashMap<String, Text> texts;
 	private static WordSenseDisambiguation wsd;
 	private static ShallowNLP snlp;
 	private static GraphBuilder graphBuilder;
 	private static NERTagger ner;
+	private static TopicExtractionCore topicExtractionCommon;
 	private PrePipelineData ppd;
 
 	@BeforeClass
@@ -51,13 +53,15 @@ public class OntologySelectorTest {
 		ner.init();
 		wsd = new WordSenseDisambiguation();
 		wsd.init();
-		topicExtraction = new TopicExtractionCommon();
+		topicExtraction = new TopicExtraction();
 		topicExtraction.init();
 
 		texts = TestHelper.texts;
 
+		topicExtractionCommon = new TopicExtractionCore(); // TODO
+
 		ontoSelector = new OntologySelector();
-		ontoSelector.setTopicExtraction(topicExtraction);
+		ontoSelector.setTopicExtraction(topicExtractionCommon);
 		ontoSelector.useSavedTopicOntologies(true);
 		ontoSelector.init();
 	}
