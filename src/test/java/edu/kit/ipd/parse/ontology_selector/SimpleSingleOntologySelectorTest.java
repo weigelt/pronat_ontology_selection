@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.kit.ipd.parse.ontology_selector.OntologySelector;
 import edu.kit.ipd.parse.topic_extraction_common.Topic;
 import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;
 
@@ -14,6 +14,7 @@ import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;
  * @author Jan Keim
  *
  */
+@Ignore
 public class SimpleSingleOntologySelectorTest {
 	// private static final Logger logger = LoggerFactory.getLogger(SimpleSingleOntologySelectorTest.class);
 

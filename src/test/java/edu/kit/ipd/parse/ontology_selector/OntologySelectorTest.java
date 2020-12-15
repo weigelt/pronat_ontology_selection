@@ -18,7 +18,6 @@ import edu.kit.ipd.parse.luna.graph.IGraph;
 import edu.kit.ipd.parse.luna.pipeline.PipelineStageException;
 import edu.kit.ipd.parse.luna.tools.StringToHypothesis;
 import edu.kit.ipd.parse.ner.NERTagger;
-import edu.kit.ipd.parse.ontology_selector.OntologySelector;
 import edu.kit.ipd.parse.ontology_selector.util.TestHelper;
 import edu.kit.ipd.parse.ontology_selector.util.Text;
 import edu.kit.ipd.parse.shallownlp.ShallowNLP;
@@ -30,7 +29,7 @@ import edu.kit.ipd.parse.wikiWSD.WordSenseDisambiguation;
  * @author Jan Keim
  *
  */
-// @Ignore
+@Ignore
 public class OntologySelectorTest {
 	private static final Logger logger = LoggerFactory.getLogger(OntologySelectorTest.class);
 

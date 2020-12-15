@@ -16,6 +16,7 @@ import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;
  * @author Jan Keim
  *
  */
+@Ignore
 public class SimpleOntologySelectorEval {
 	private static final Logger logger = LoggerFactory.getLogger(SimpleOntologySelectorEval.class);
 
