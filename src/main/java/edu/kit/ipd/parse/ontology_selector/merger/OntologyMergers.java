@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontologySelector.merger;
+package edu.kit.ipd.parse.ontology_selector.merger;
 
 /**
  * Enum representing the different {@link OntologyMerger}s. Use {@link #get()} to get an instance of the

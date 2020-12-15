@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontologySelector.merger;
+package edu.kit.ipd.parse.ontology_selector.merger;
 
 import java.io.File;
 import java.util.HashSet;
@@ -26,7 +26,7 @@ import org.semanticweb.owlapi.util.OWLEntityRenamer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.kit.ipd.parse.ontologySelector.TopicOntology;
+import edu.kit.ipd.parse.ontology_selector.TopicOntology;
 
 /**
  * Simple {@link OntologyMerger} that throws all axioms and ImportsDeclarations into a new Ontology and renames the

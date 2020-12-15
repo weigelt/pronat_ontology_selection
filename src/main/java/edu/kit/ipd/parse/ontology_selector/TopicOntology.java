@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontologySelector;
+package edu.kit.ipd.parse.ontology_selector;
 
 import java.io.File;
 import java.io.FileInputStream;

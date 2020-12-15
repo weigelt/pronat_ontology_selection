@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontologySelector;
+package edu.kit.ipd.parse.ontology_selector;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -18,8 +18,9 @@ import edu.kit.ipd.parse.luna.graph.IGraph;
 import edu.kit.ipd.parse.luna.pipeline.PipelineStageException;
 import edu.kit.ipd.parse.luna.tools.StringToHypothesis;
 import edu.kit.ipd.parse.ner.NERTagger;
-import edu.kit.ipd.parse.ontologySelector.util.TestHelper;
-import edu.kit.ipd.parse.ontologySelector.util.Text;
+import edu.kit.ipd.parse.ontology_selector.OntologySelector;
+import edu.kit.ipd.parse.ontology_selector.util.TestHelper;
+import edu.kit.ipd.parse.ontology_selector.util.Text;
 import edu.kit.ipd.parse.shallownlp.ShallowNLP;
 import edu.kit.ipd.parse.topic_extraction.TopicExtraction;
 import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;

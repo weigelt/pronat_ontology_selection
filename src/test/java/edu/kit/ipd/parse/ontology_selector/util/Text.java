@@ -1,7 +1,7 @@
 /**
  *
  */
-package edu.kit.ipd.parse.ontologySelector.util;
+package edu.kit.ipd.parse.ontology_selector.util;
 
 import java.util.List;
 

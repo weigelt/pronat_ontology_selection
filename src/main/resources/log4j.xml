@@ -9,16 +9,10 @@
 	   </layout>
 	 </appender>
 	
-	<logger name="im.janke.ontologySelector">
+	<logger name="edu.kit.ipd.parse.ontology_selector">
 		<level value="debug"/>
 	</logger>
-	
-<!--  
-	<logger name="im.janke.topicExtraction">
-		<level value="debug"/>
-	</logger>
--->
-	 
+		 
 	<logger name="org.semanticweb.owlapi.util.SAXParsers">
 		<level value="error"/>
 	</logger>

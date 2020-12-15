@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontologySelector;
+package edu.kit.ipd.parse.ontology_selector;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,9 +39,9 @@ import edu.kit.ipd.parse.luna.graph.INode;
 import edu.kit.ipd.parse.luna.graph.INodeType;
 import edu.kit.ipd.parse.luna.graph.Pair;
 import edu.kit.ipd.parse.luna.tools.ConfigManager;
-import edu.kit.ipd.parse.ontologySelector.extractors.WikiConceptExtractor;
-import edu.kit.ipd.parse.ontologySelector.merger.OntologyMerger;
-import edu.kit.ipd.parse.ontologySelector.merger.SimpleOntologyMerger;
+import edu.kit.ipd.parse.ontology_selector.extractors.WikiConceptExtractor;
+import edu.kit.ipd.parse.ontology_selector.merger.OntologyMerger;
+import edu.kit.ipd.parse.ontology_selector.merger.SimpleOntologyMerger;
 import edu.kit.ipd.parse.topic_extraction_common.Topic;
 import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;
 import edu.kit.ipd.parse.topic_extraction_common.TopicSelectionMethod;
@@ -65,7 +65,7 @@ public class OntologySelector extends AbstractAgent {
 	private boolean useSavedTopicOntologies = false;
 
 	private double threshold = 0.1;
-	private final int amountOfTopics = 5;
+	private static final int NUMBER_OF_TOPICS = 5;
 
 	private String outputFolder;
 
@@ -73,7 +73,7 @@ public class OntologySelector extends AbstractAgent {
 	public void init() {
 		this.setId(ID);
 		this.topicExtraction = new TopicExtractionCore();
-		this.topicExtraction.setNumTopics(this.amountOfTopics);
+		this.topicExtraction.setNumTopics(NUMBER_OF_TOPICS);
 		// save old method to be able to restore later
 		final TopicSelectionMethod oldSM = this.topicExtraction.getTopicSelectionMethod();
 		// change to maxConnectivity method
@@ -125,6 +125,8 @@ public class OntologySelector extends AbstractAgent {
 	}
 
 	/**
+	 *
+	 *
 	 * Sets the threshold factor for selecting ontologies. Default is
 	 * (1-threshold)=0.9
 	 *
@@ -134,8 +136,10 @@ public class OntologySelector extends AbstractAgent {
 	 * @param thresholdFactor
 	 *            thresholdFactor for setting the threshold for selecting
 	 *            ontologies
+	 * @deprecated This method is deprecated and will be removed in later
+	 *             version
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public void setThresholdFactor(double thresholdFactor) {
 		this.threshold = 1 - thresholdFactor;
 	}
@@ -163,20 +167,20 @@ public class OntologySelector extends AbstractAgent {
 							path = pathURL.getFile();
 							if (!new File(path).exists()) {
 								// still not found, don't load the ontology in
-								logger.warn("Could not load ontology and will skip it: " + ontologyPath);
+								logger.warn("Could not load ontology and will skip it: {}", ontologyPath);
 								continue;
 							}
 						} else {
-							logger.warn("Could not load ontology and will skip it: " + ontologyPath);
+							logger.warn("Could not load ontology and will skip it: {}", ontologyPath);
 							continue;
 						}
 					}
 					final String finalPath = path;
 					if (isActor) {
-						logger.info("Starting to add actor ontology at " + finalPath);
+						logger.info("Starting to add actor ontology at {}", finalPath);
 						executor.execute(() -> this.registerActorOntology(finalPath));
 					} else {
-						logger.info("Starting to add environment ontology at " + finalPath);
+						logger.info("Starting to add environment ontology at {}", finalPath);
 						executor.execute(() -> this.registerEnvironmentOntology(finalPath));
 					}
 				}
@@ -188,7 +192,8 @@ public class OntologySelector extends AbstractAgent {
 		try {
 			executor.awaitTermination(1, TimeUnit.HOURS);
 		} catch (final InterruptedException e) {
-			e.printStackTrace();
+			logger.warn("Interrupted!", e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -218,7 +223,6 @@ public class OntologySelector extends AbstractAgent {
 		TopicOntology topicOntology = null;
 		final String savePath = path + ".ossf";
 		if (this.useSavedTopicOntologies && new File(savePath).isFile()) {
-			// TODO what happens at ontology change?
 			final Optional<TopicOntology> optTO = TopicOntology.loadFromPath(savePath);
 			if (optTO.isPresent()) {
 				topicOntology = optTO.get();
@@ -229,7 +233,7 @@ public class OntologySelector extends AbstractAgent {
 			// load ontology
 			final Optional<OWLOntology> optOnto = this.loadOntology(path);
 			if (!optOnto.isPresent()) {
-				logger.warn("Problem when trying to load Ontology at " + path);
+				logger.warn("Problem when trying to load Ontology at {}", path);
 				return false;
 			}
 			final OWLOntology onto = optOnto.get();
@@ -243,10 +247,10 @@ public class OntologySelector extends AbstractAgent {
 			synchronized (this.topicExtraction) {
 				if (logger.isDebugEnabled()) {
 					final LocalDateTime currentTime = LocalDateTime.now();
-					logger.debug(currentTime.toLocalTime().toString() + "\tGetting Topics for " + path);
+					logger.debug("{}\tGetting Topics for {}", currentTime.toLocalTime(), path);
 				}
 				tg = this.topicExtraction.getTopicGraphForSenses(concepts);
-				ontologyTopics = this.topicExtraction.getTopicsForTopicGraph(tg, this.amountOfTopics);
+				ontologyTopics = this.topicExtraction.getTopicsForTopicGraph(tg, NUMBER_OF_TOPICS);
 			}
 			topicOntology = new TopicOntology(onto, path, ontologyTopics, tg);
 			if (this.useSavedTopicOntologies) {
@@ -301,7 +305,7 @@ public class OntologySelector extends AbstractAgent {
 		}
 		final Pair<OWLOntology, String> mergedOntologyAndPath = this.exec(topics);
 		if (logger.isInfoEnabled()) {
-			logger.info("Merged ontology saved to " + mergedOntologyAndPath.getRight());
+			logger.info("Merged ontology saved to {}", mergedOntologyAndPath.getRight());
 		}
 		// annotate Onto to graph
 		this.annotateOntologyToGraph(mergedOntologyAndPath.getLeft());
@@ -361,8 +365,7 @@ public class OntologySelector extends AbstractAgent {
 		final File file = new File(filename);
 		this.saveOntologyToFile(owlManager, merged, file);
 
-		final Pair<OWLOntology, String> retPair = new Pair<>(merged, filename);
-		return retPair;
+		return new Pair<>(merged, filename);
 	}
 
 	private List<TopicOntology> selectOntologies(SelectionMethod selectionMethod, Map<TopicOntology, Double> actorAgreements,
@@ -390,10 +393,10 @@ public class OntologySelector extends AbstractAgent {
 		// print info about selection
 		if (logger.isDebugEnabled()) {
 			for (final java.util.Map.Entry<TopicOntology, Double> entry : envAgreements.entrySet()) {
-				logger.debug("Env: " + entry.getKey().getDescription() + " with " + entry.getValue());
+				logger.debug("Env: {} with {}", entry.getKey().getDescription(), entry.getValue());
 			}
 			for (final java.util.Map.Entry<TopicOntology, Double> entry : actorAgreements.entrySet()) {
-				logger.debug("Act: " + entry.getKey().getDescription() + " with " + entry.getValue());
+				logger.debug("Act: {} with {}", entry.getKey().getDescription(), entry.getValue());
 			}
 		}
 		if (logger.isInfoEnabled()) {
@@ -420,8 +423,7 @@ public class OntologySelector extends AbstractAgent {
 		final List<String> names = new ArrayList<>();
 		for (final TopicOntology to : ontologies) {
 			String desc = to.getDescription();
-			desc = desc.replaceAll("http://www.semanticweb.org/", "").replaceAll("environment_", "").replaceAll("_", "")
-					.replaceAll("actor_", "");
+			desc = desc.replace("http://www.semanticweb.org/", "").replace("environment_", "").replace("_", "").replace("actor_", "");
 			names.add(WordUtils.capitalize(desc));
 		}
 		return names.stream().sorted().collect(Collectors.joining());
@@ -429,13 +431,12 @@ public class OntologySelector extends AbstractAgent {
 
 	private OWLOntology mergeOntologies(OWLOntologyManager owlManager, List<TopicOntology> ontologies) {
 		final OntologyMerger merger = new SimpleOntologyMerger();
-		final OWLOntology merged = merger.merge(owlManager, ontologies,
+		return merger.merge(owlManager, ontologies,
 				IRI.create("http://www.semanticweb.com/mergedOntology_" + this.getMergedOntoIdentificator(ontologies)));
-		return merged;
 	}
 
 	private void saveOntologyToFile(OWLOntologyManager owlManager, OWLOntology onto, File file) {
-		if ((onto == null) || (onto == null) || (file == null)) {
+		if ((onto == null) || (owlManager == null) || (file == null)) {
 			throw new IllegalArgumentException("A provided Argument is null!");
 		}
 
@@ -445,7 +446,7 @@ public class OntologySelector extends AbstractAgent {
 			e.printStackTrace();
 		}
 		if (logger.isDebugEnabled()) {
-			logger.debug("Saving merged ontology to " + file.getAbsolutePath() + "\n");
+			logger.debug("Saving merged ontology to {}\n", file.getAbsolutePath());
 		}
 	}
 
@@ -515,13 +516,12 @@ public class OntologySelector extends AbstractAgent {
 	private List<TopicOntology> selectBestAndSimilarOntologies(Map<TopicOntology, Double> conformities, double thresholdFactor) {
 
 		// get best ontology score
-		double bestScore = -1.0;
-		bestScore = conformities.values().stream().max(Double::compare).orElse(-1.0);
+		final double bestScore = conformities.values().stream().max(Double::compare).orElse(-1.0);
 		if (bestScore < 0.0) {
 			return new ArrayList<>();
 		}
-		final double threshold = bestScore * (thresholdFactor);
-		return this.selectOntologiesByThreshold(conformities, threshold);
+		final double currThreshold = bestScore * (thresholdFactor);
+		return this.selectOntologiesByThreshold(conformities, currThreshold);
 	}
 
 	private List<String> getConceptsFromOntology(OWLOntology onto) {

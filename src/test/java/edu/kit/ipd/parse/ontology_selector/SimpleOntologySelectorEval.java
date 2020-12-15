@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontologySelector;
+package edu.kit.ipd.parse.ontology_selector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,6 @@ public class SimpleOntologySelectorEval {
 		ontoSelector.useSavedTopicOntologies(true);
 		ontoSelector.setTopicExtraction(topicExtraction);
 		ontoSelector.init();
-		// ontoSelector.setThreshold(0.15);
 	}
 
 	private void test(List<String> wordSenses, String id) {

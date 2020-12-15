@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontologySelector;
+package edu.kit.ipd.parse.ontology_selector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.kit.ipd.parse.ontology_selector.OntologySelector;
 import edu.kit.ipd.parse.topic_extraction_common.Topic;
 import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;
 

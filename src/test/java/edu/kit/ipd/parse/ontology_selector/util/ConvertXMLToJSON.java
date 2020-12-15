@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontologySelector.util;
+package edu.kit.ipd.parse.ontology_selector.util;
 
 import java.io.File;
 import java.io.IOException;

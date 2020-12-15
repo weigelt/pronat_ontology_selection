@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontologySelector.extractors;
+package edu.kit.ipd.parse.ontology_selector.extractors;
 
 import java.util.List;
 import java.util.stream.Collectors;

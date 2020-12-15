@@ -1,7 +1,7 @@
 /**
  *
  */
-package edu.kit.ipd.parse.ontologySelector;
+package edu.kit.ipd.parse.ontology_selector;
 
 /**
  * @author Jan Keim
