@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.kit.ipd.parse.ontologySelector.OntologySelector;
-import edu.kit.ipd.parse.topicExtraction.Topic;
-import edu.kit.ipd.parse.topicExtraction.TopicExtraction;
+import edu.kit.ipd.parse.topic_extraction_common.Topic;
+import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCommon;
 
 /**
  * @author Jan Keim
@@ -20,11 +20,11 @@ public class SimpleOntologySelectorTest {
 	private static final Logger logger = LoggerFactory.getLogger(SimpleOntologySelectorTest.class);
 
 	private static OntologySelector	ontoSelector;
-	private static TopicExtraction	topicExtraction;
+	private static TopicExtractionCommon	topicExtraction;
 
 	@BeforeClass
 	public static void beforeClass() {
-		topicExtraction = new TopicExtraction();
+		topicExtraction = new TopicExtractionCommon();
 		topicExtraction.init();
 
 		ontoSelector = new OntologySelector();

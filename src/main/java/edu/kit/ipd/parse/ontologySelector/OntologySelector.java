@@ -42,10 +42,10 @@ import edu.kit.ipd.parse.luna.tools.ConfigManager;
 import edu.kit.ipd.parse.ontologySelector.extractors.WikiConceptExtractor;
 import edu.kit.ipd.parse.ontologySelector.merger.OntologyMerger;
 import edu.kit.ipd.parse.ontologySelector.merger.SimpleOntologyMerger;
-import edu.kit.ipd.parse.topicExtraction.Topic;
-import edu.kit.ipd.parse.topicExtraction.TopicExtraction;
-import edu.kit.ipd.parse.topicExtraction.TopicSelectionMethod;
-import edu.kit.ipd.parse.topicExtraction.graph.TopicGraph;
+import edu.kit.ipd.parse.topic_extraction_common.Topic;
+import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCommon;
+import edu.kit.ipd.parse.topic_extraction_common.TopicSelectionMethod;
+import edu.kit.ipd.parse.topic_extraction_common.graph.TopicGraph;
 
 /**
  * @author Jan Keim
@@ -58,7 +58,7 @@ public class OntologySelector extends AbstractAgent {
 	public static final String	ONTOLOGY_ATTRIBUTE	= "ontology";
 	public static final String	ONTOLOGY_NODE_TYPE	= "ontology";
 
-	private TopicExtraction		topicExtraction;
+	private TopicExtractionCommon		topicExtraction;
 	private List<TopicOntology>	actorOntologies;
 	private List<TopicOntology>	environmentOntologies;
 	private SelectionMethod		selectionMethod			= SelectionMethod.BEST_AND_SIMILAR;
@@ -72,7 +72,7 @@ public class OntologySelector extends AbstractAgent {
 	@Override
 	public void init() {
 		setId(ID);
-		topicExtraction = new TopicExtraction();
+		topicExtraction = new TopicExtractionCommon();
 		topicExtraction.init();
 		// save old method to be able to restore later
 		TopicSelectionMethod oldSM = topicExtraction.getTopicSelectionMethod();
@@ -102,13 +102,13 @@ public class OntologySelector extends AbstractAgent {
 	}
 
 	/**
-	 * Sets the {@link TopicExtraction} instance that should be used for getting the topics for an ontology. Needs to be
+	 * Sets the {@link TopicExtractionCommon} instance that should be used for getting the topics for an ontology. Needs to be
 	 * called BEFORE {@link #init()}!
 	 *
 	 * @param te
 	 *            TopicExtraction instance that should be used
 	 */
-	public void setTopicExtraction(TopicExtraction te) {
+	public void setTopicExtraction(TopicExtractionCommon te) {
 		topicExtraction = te;
 	}
 
@@ -289,7 +289,7 @@ public class OntologySelector extends AbstractAgent {
 	protected void exec() {
 		prepareGraph();
 		// get topics out of graph
-		List<Topic> topics = TopicExtraction.getTopicsFromIGraph(graph);
+		List<Topic> topics = TopicExtractionCommon.getTopicsFromIGraph(graph);
 		if (topics.isEmpty()) {
 			logger.warn("No annotated topics found. Aborting...");
 			return;

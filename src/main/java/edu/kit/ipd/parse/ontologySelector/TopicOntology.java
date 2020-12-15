@@ -24,9 +24,9 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 
-import edu.kit.ipd.parse.topicExtraction.Topic;
-import edu.kit.ipd.parse.topicExtraction.graph.TopicGraph;
-import edu.kit.ipd.parse.topicExtraction.graph.WikiVertex;
+import edu.kit.ipd.parse.topic_extraction_common.Topic;
+import edu.kit.ipd.parse.topic_extraction_common.graph.TopicGraph;
+import edu.kit.ipd.parse.topic_extraction_common.graph.WikiVertex;
 
 /**
  * @author Jan Keim
