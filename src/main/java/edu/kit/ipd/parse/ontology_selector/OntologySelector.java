@@ -146,47 +146,12 @@ public class OntologySelector extends AbstractAgent {
 
 	private void loadOntologiesFromConfig(Properties props) {
 
-		boolean isActor = false;
 		final ExecutorService executor = Executors.newWorkStealingPool();
-		do {
-			String ontologiesPaths;
-			if (isActor) {
-				ontologiesPaths = props.getProperty("ACTOR_ONTOLOGIES", "");
-			} else {
-				ontologiesPaths = props.getProperty("ENVIRONMENT_ONTOLOGIES", "");
-			}
-
-			if (!ontologiesPaths.isEmpty()) {
-				for (final String ontologyPath : ontologiesPaths.split(",")) {
-					String path = ontologyPath;
-					// check if the path is correct the way it is provided by checking existence
-					if (!new File(path).exists()) {
-						// not existing, then try with getting as resource
-						final URL pathURL = OntologySelector.class.getResource(path);
-						if (pathURL != null) {
-							path = pathURL.getFile();
-							if (!new File(path).exists()) {
-								// still not found, don't load the ontology in
-								logger.warn("Could not load ontology and will skip it: {}", ontologyPath);
-								continue;
-							}
-						} else {
-							logger.warn("Could not load ontology and will skip it: {}", ontologyPath);
-							continue;
-						}
-					}
-					final String finalPath = path;
-					if (isActor) {
-						logger.info("Starting to add actor ontology at {}", finalPath);
-						executor.execute(() -> this.registerActorOntology(finalPath));
-					} else {
-						logger.info("Starting to add environment ontology at {}", finalPath);
-						executor.execute(() -> this.registerEnvironmentOntology(finalPath));
-					}
-				}
-			}
-			isActor = !isActor;
-		} while (isActor);
+		String ontologiesPaths;
+		ontologiesPaths = props.getProperty("ACTOR_ONTOLOGIES", "");
+		this.loadOntologies(true, executor, ontologiesPaths);
+		ontologiesPaths = props.getProperty("ENVIRONMENT_ONTOLOGIES", "");
+		this.loadOntologies(false, executor, ontologiesPaths);
 
 		executor.shutdown();
 		try {
@@ -195,6 +160,47 @@ public class OntologySelector extends AbstractAgent {
 			logger.warn("Interrupted!", e);
 			Thread.currentThread().interrupt();
 		}
+	}
+
+	private void loadOntologies(boolean isActor, final ExecutorService executor, String ontologiesPaths) {
+		if (!ontologiesPaths.isEmpty()) {
+			return;
+		}
+		for (final String ontologyPath : ontologiesPaths.split(",")) {
+			final String path = this.checkPathAndAttemptFixing(ontologyPath);
+			if (path == null) {
+				logger.warn("Could not load ontology and will skip it: {}", ontologyPath);
+				continue;
+			}
+
+			if (isActor) {
+				logger.info("Starting to add actor ontology at {}", path);
+				executor.execute(() -> this.registerActorOntology(path));
+			} else {
+				logger.info("Starting to add environment ontology at {}", path);
+				executor.execute(() -> this.registerEnvironmentOntology(path));
+			}
+
+		}
+
+	}
+
+	private String checkPathAndAttemptFixing(final String ontologyPath) {
+		String path = ontologyPath;
+		// check if the path is correct the way it is provided by checking existence
+		if (!new File(path).exists()) {
+			// not existing, then try with getting as resource
+			final URL pathURL = OntologySelector.class.getResource(path);
+			path = null;
+			if (pathURL != null) {
+				path = pathURL.getFile();
+				if (!new File(path).exists()) {
+					// still not found, return null because path could not be resolved
+					return null;
+				}
+			}
+		}
+		return path;
 	}
 
 	/**
@@ -238,24 +244,7 @@ public class OntologySelector extends AbstractAgent {
 			}
 			final OWLOntology onto = optOnto.get();
 
-			// get wiki-concepts out of ontology
-			final List<String> concepts = this.getConceptsFromOntology(onto);
-
-			// do topic extraction
-			TopicGraph tg;
-			List<Topic> ontologyTopics;
-			synchronized (this.topicExtraction) {
-				if (logger.isDebugEnabled()) {
-					final LocalDateTime currentTime = LocalDateTime.now();
-					logger.debug("{}\tGetting Topics for {}", currentTime.toLocalTime(), path);
-				}
-				tg = this.topicExtraction.getTopicGraphForSenses(concepts);
-				ontologyTopics = this.topicExtraction.getTopicsForTopicGraph(tg, NUMBER_OF_TOPICS);
-			}
-			topicOntology = new TopicOntology(onto, path, ontologyTopics, tg);
-			if (this.useSavedTopicOntologies) {
-				topicOntology.saveToPath(savePath);
-			}
+			topicOntology = this.createTopicOntology(path, savePath, onto);
 		}
 
 		if (logger.isDebugEnabled()) {
@@ -267,6 +256,29 @@ public class OntologySelector extends AbstractAgent {
 		} else {
 			return this.environmentOntologies.add(topicOntology);
 		}
+	}
+
+	private TopicOntology createTopicOntology(String path, final String savePath, final OWLOntology onto) {
+		// get wiki-concepts out of ontology
+		final List<String> concepts = this.getConceptsFromOntology(onto);
+
+		// do topic extraction
+		TopicGraph tg;
+		List<Topic> ontologyTopics;
+		synchronized (this.topicExtraction) {
+			if (logger.isDebugEnabled()) {
+				final LocalDateTime currentTime = LocalDateTime.now();
+				logger.debug("{}\tGetting Topics for {}", currentTime.toLocalTime(), path);
+			}
+			tg = this.topicExtraction.getTopicGraphForSenses(concepts);
+			ontologyTopics = this.topicExtraction.getTopicsForTopicGraph(tg, NUMBER_OF_TOPICS);
+		}
+
+		final TopicOntology topicOntology = new TopicOntology(onto, path, ontologyTopics, tg);
+		if (this.useSavedTopicOntologies) {
+			topicOntology.saveToPath(savePath);
+		}
+		return topicOntology;
 	}
 
 	private Optional<OWLOntology> loadOntology(String path) {
@@ -320,7 +332,7 @@ public class OntologySelector extends AbstractAgent {
 	 * @return {@link Optional} with an {@link OWLOntology} if one was annotated
 	 *         or an empty {@link Optional} otherwise
 	 */
-	public static Optional<OWLOntology> getOntologyFromIGraph(IGraph inputGraph) {
+	public static Optional<OWLOntology> getOntologyFromIGraph(IGraph inputGraph) { //TODO
 		final Optional<OWLOntology> retVal = Optional.empty();
 		if (!inputGraph.hasNodeType(ONTOLOGY_NODE_TYPE)) {
 			return retVal;
@@ -344,7 +356,7 @@ public class OntologySelector extends AbstractAgent {
 		}
 	}
 
-	private void annotateOntologyToGraph(OWLOntology ontology) {
+	private void annotateOntologyToGraph(OWLOntology ontology) { //TODO
 		final INode node = this.graph.createNode(this.graph.getNodeType(ONTOLOGY_NODE_TYPE));
 		node.setAttributeValue(ONTOLOGY_ATTRIBUTE, ontology);
 	}
