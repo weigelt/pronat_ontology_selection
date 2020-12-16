@@ -7,11 +7,13 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
@@ -53,10 +55,14 @@ import edu.kit.ipd.parse.topic_extraction_common.graph.TopicGraph;
  */
 @MetaInfServices(AbstractAgent.class)
 public class OntologySelector extends AbstractAgent {
+	private static final String STRING_TYPE = "String";
+	private static final String LIST_TYPE = "java.util.List";
 	private static final Logger logger = LoggerFactory.getLogger(OntologySelector.class);
 	private static final String ID = "OntologySelector";
-	public static final String ONTOLOGY_ATTRIBUTE = "ontology";
-	public static final String ONTOLOGY_NODE_TYPE = "ontology";
+	private static final String ONTOLOGY_NODE_TYPE = "ontology";
+	private static final String ONTOLOGY_PATH_ATTRIBUTE = "ontologyPath";
+	private static final String SELECTED_ONTOLOGIES_ATTRIBUTE = "selectedOntologies";
+	private static final String ONTOLOGY_AGREEMENTS_ATTRIBUTE = "ontologyAgreements";
 
 	private TopicExtractionCore topicExtraction;
 	private List<TopicOntology> actorOntologies;
@@ -122,26 +128,6 @@ public class OntologySelector extends AbstractAgent {
 	 */
 	public void setThreshold(double threshold) {
 		this.threshold = threshold;
-	}
-
-	/**
-	 *
-	 *
-	 * Sets the threshold factor for selecting ontologies. Default is
-	 * (1-threshold)=0.9
-	 *
-	 * {@link Deprecated} because it is basically the same as
-	 * {@link #setThreshold(double)}, only inverted
-	 *
-	 * @param thresholdFactor
-	 *            thresholdFactor for setting the threshold for selecting
-	 *            ontologies
-	 * @deprecated This method is deprecated and will be removed in later
-	 *             version
-	 */
-	@Deprecated(forRemoval = true)
-	public void setThresholdFactor(double thresholdFactor) {
-		this.threshold = 1 - thresholdFactor;
 	}
 
 	private void loadOntologiesFromConfig(Properties props) {
@@ -237,7 +223,7 @@ public class OntologySelector extends AbstractAgent {
 
 		if (topicOntology == null) {
 			// load ontology
-			final Optional<OWLOntology> optOnto = this.loadOntology(path);
+			final Optional<OWLOntology> optOnto = loadOntology(path);
 			if (!optOnto.isPresent()) {
 				logger.warn("Problem when trying to load Ontology at {}", path);
 				return false;
@@ -281,7 +267,7 @@ public class OntologySelector extends AbstractAgent {
 		return topicOntology;
 	}
 
-	private Optional<OWLOntology> loadOntology(String path) {
+	private static Optional<OWLOntology> loadOntology(String path) {
 		OWLOntology onto = null;
 		final OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 
@@ -301,8 +287,19 @@ public class OntologySelector extends AbstractAgent {
 		} else {
 			tokenType = this.graph.createNodeType(ONTOLOGY_NODE_TYPE);
 		}
-		if (!tokenType.containsAttribute(ONTOLOGY_ATTRIBUTE, "org.semanticweb.owlapi.model.OWLOntology")) {
-			tokenType.addAttributeToType("org.semanticweb.owlapi.model.OWLOntology", ONTOLOGY_ATTRIBUTE);
+
+		// Attribute that shows where the merged ontology is (saved to)
+		if (!tokenType.containsAttribute(ONTOLOGY_PATH_ATTRIBUTE, STRING_TYPE)) {
+			tokenType.addAttributeToType(STRING_TYPE, ONTOLOGY_PATH_ATTRIBUTE);
+
+		}
+		//  Attribute for all ontologies (path, Id, name, ...) with their agreements (Pair<String, Double>)
+		if (!tokenType.containsAttribute(ONTOLOGY_AGREEMENTS_ATTRIBUTE, LIST_TYPE)) {
+			tokenType.addAttributeToType(LIST_TYPE, ONTOLOGY_AGREEMENTS_ATTRIBUTE);
+		}
+		// Attribute for all selected ontologies
+		if (!tokenType.containsAttribute(SELECTED_ONTOLOGIES_ATTRIBUTE, LIST_TYPE)) {
+			tokenType.addAttributeToType(LIST_TYPE, SELECTED_ONTOLOGIES_ATTRIBUTE);
 		}
 	}
 
@@ -319,8 +316,31 @@ public class OntologySelector extends AbstractAgent {
 		if (logger.isInfoEnabled()) {
 			logger.info("Merged ontology saved to {}", mergedOntologyAndPath.getRight());
 		}
-		// annotate Onto to graph
-		this.annotateOntologyToGraph(mergedOntologyAndPath.getLeft());
+	}
+
+	protected Pair<OWLOntology, String> exec(List<Topic> topics) {
+		// compare topics in command with topics from ontologies
+		final Map<TopicOntology, Double> actorAgreements = calculateTopicOntologyConformities(topics, this.actorOntologies);
+		final Map<TopicOntology, Double> envAgreements = calculateTopicOntologyConformities(topics, this.environmentOntologies);
+
+		// select ontology/ontologies
+		final List<TopicOntology> ontologies = this.selectOntologies(this.selectionMethod, actorAgreements, envAgreements);
+
+		this.annotateAgreementsToGraph(actorAgreements, envAgreements);
+		this.annotateSelectedOntologiesToGraph(ontologies);
+
+		// maybe save the selected (and merged) ontology
+		final OWLOntologyManager owlManager = OWLManager.createOWLOntologyManager();
+		final OWLOntology merged = this.mergeOntologies(owlManager, ontologies);
+		final String mergeId = this.getMergedOntoIdentificator(ontologies);
+		final String filename = this.outputFolder + "merged_" + mergeId + ".owl";
+		final File file = new File(filename);
+		this.saveOntologyToFile(owlManager, merged, file);
+		final String path = file.getAbsolutePath();
+
+		this.annotateOntologyToGraph(path);
+
+		return new Pair<>(merged, path);
 	}
 
 	/**
@@ -332,8 +352,135 @@ public class OntologySelector extends AbstractAgent {
 	 * @return {@link Optional} with an {@link OWLOntology} if one was annotated
 	 *         or an empty {@link Optional} otherwise
 	 */
-	public static Optional<OWLOntology> getOntologyFromIGraph(IGraph inputGraph) { //TODO
+	public static Optional<OWLOntology> getOntologyFromIGraph(IGraph inputGraph) {
 		final Optional<OWLOntology> retVal = Optional.empty();
+		final Optional<INode> optNode = getOntologyNode(inputGraph);
+		if (optNode.isEmpty()) {
+			return retVal;
+		}
+		final INode node = optNode.get();
+		final Object value = node.getAttributeValue(ONTOLOGY_PATH_ATTRIBUTE);
+		if (value == null) {
+			return retVal;
+		}
+		if (value instanceof String) {
+			final String path = (String) value;
+			return loadOntology(path);
+		} else {
+			return retVal;
+		}
+	}
+
+	/**
+	 * Returns the {@link List} of {@link Pair}s containing the selected
+	 * ontologies that were stored in the graph. The pairs consists of two
+	 * strings. The first (left) part contains the id/description of the
+	 * ontology. The second (right) part the path to the ontology.
+	 *
+	 * @param inputGraph
+	 *            Graph with an Ontology Node containing the attribute with
+	 *            selected ontologies
+	 * @return List of Pairs, each Pair contains the description of and path to
+	 *         the ontology. Returns an empty List if any problems occurred
+	 *         (e.g., missing node or attribute)
+	 */
+	public static List<Pair<String, String>> getSelectedOntologiesFromIGraph(IGraph inputGraph) {
+		final Optional<INode> optNode = getOntologyNode(inputGraph);
+		if (optNode.isEmpty()) {
+			return new ArrayList<>();
+		}
+		final INode node = optNode.get();
+		final Object value = node.getAttributeValue(SELECTED_ONTOLOGIES_ATTRIBUTE);
+
+		return unserializeListOfPair(value);
+	}
+
+	/**
+	 * Returns a {@link List} of {@link Pair}s containing the agreements for all
+	 * ontologies. Each Pair contains the description/id of the ontology and a
+	 * double with the agreement.
+	 *
+	 * @param inputGraph
+	 *            Graph with an Ontology Node containing the agreements
+	 * @return List of Pairs, each Pair contains the description of and
+	 *         agreement for the ontology. Returns an empty List if any problems
+	 *         occurred (e.g., missing node or attribute)
+	 */
+	public static List<Pair<String, Double>> getAgreementsFromIGraph(IGraph inputGraph) {
+		final Optional<INode> optNode = getOntologyNode(inputGraph);
+		if (optNode.isEmpty()) {
+			return new ArrayList<>();
+		}
+		final INode node = optNode.get();
+		final Object value = node.getAttributeValue(ONTOLOGY_AGREEMENTS_ATTRIBUTE);
+		return unserializeListOfPair(value);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T, S> List<Pair<T, S>> unserializeListOfPair(final Object value) {
+		final List<Pair<T, S>> retVal = new ArrayList<>();
+		final List<?> valueList = (List<?>) value;
+		if (Objects.isNull(value) || !(value instanceof List)) {
+			return retVal;
+		}
+
+		for (final Object entry : valueList) {
+			if (entry instanceof Pair) {
+				final Pair<?, ?> pair = (Pair<?, ?>) entry;
+				final Object left = pair.getLeft();
+				final Object right = pair.getRight();
+				T id = null;
+				S agreement = null;
+				try {
+					id = (T) left;
+					agreement = (S) right;
+				} catch (final ClassCastException e) {
+					logger.warn(e.getMessage(), e.getCause());
+				}
+
+				if (id != null && agreement != null) {
+					final Pair<T, S> realPair = new Pair<>(id, agreement);
+					retVal.add(realPair);
+				}
+			}
+		}
+		return retVal;
+	}
+
+	private void annotateOntologyToGraph(String path) {
+		final INode node = this.getOrCreateOntologyNode();
+		node.setAttributeValue(ONTOLOGY_PATH_ATTRIBUTE, path);
+	}
+
+	private void annotateAgreementsToGraph(Map<TopicOntology, Double> actorAgreements, Map<TopicOntology, Double> envAgreements) {
+		final INode node = this.getOrCreateOntologyNode();
+		final List<Pair<String, Double>> agreements = new ArrayList<>();
+		for (final Entry<TopicOntology, Double> entry : actorAgreements.entrySet()) {
+			final String id = entry.getKey().getDescription();
+			final Double agreement = entry.getValue();
+			agreements.add(new Pair<>(id, agreement));
+		}
+		for (final Entry<TopicOntology, Double> entry : envAgreements.entrySet()) {
+			final String id = entry.getKey().getDescription();
+			final Double agreement = entry.getValue();
+			agreements.add(new Pair<>(id, agreement));
+		}
+		node.setAttributeValue(ONTOLOGY_AGREEMENTS_ATTRIBUTE, Collections.unmodifiableList(agreements));
+	}
+
+	private void annotateSelectedOntologiesToGraph(List<TopicOntology> ontologies) {
+		final INode node = this.getOrCreateOntologyNode();
+		final List<Pair<String, String>> annotationPairs = new ArrayList<>();
+		for (final TopicOntology ontology : ontologies) {
+			final String id = ontology.getDescription();
+			final String path = ontology.getOntologyPath();
+			annotationPairs.add(new Pair<>(id, path));
+		}
+		node.setAttributeValue(SELECTED_ONTOLOGIES_ATTRIBUTE, Collections.unmodifiableList(annotationPairs));
+	}
+
+	private static Optional<INode> getOntologyNode(IGraph inputGraph) {
+		final Optional<INode> retVal = Optional.empty();
 		if (!inputGraph.hasNodeType(ONTOLOGY_NODE_TYPE)) {
 			return retVal;
 		}
@@ -341,43 +488,20 @@ public class OntologySelector extends AbstractAgent {
 		if ((nodesList == null) || nodesList.isEmpty()) {
 			return retVal;
 		}
-		final INode node = nodesList.get(0);
-		if (node == null) {
-			return retVal;
-		}
-		final Object o = node.getAttributeValue(ONTOLOGY_ATTRIBUTE);
-		if (o == null) {
-			return retVal;
-		}
-		if (o instanceof OWLOntology) {
-			return Optional.of((OWLOntology) o);
-		} else {
-			return retVal;
-		}
+		return Optional.ofNullable(nodesList.get(0));
 	}
 
-	private void annotateOntologyToGraph(OWLOntology ontology) { //TODO
-		final INode node = this.graph.createNode(this.graph.getNodeType(ONTOLOGY_NODE_TYPE));
-		node.setAttributeValue(ONTOLOGY_ATTRIBUTE, ontology);
-	}
-
-	protected Pair<OWLOntology, String> exec(List<Topic> topics) {
-		// compare topics in command with topics from ontologies
-		final Map<TopicOntology, Double> actorAgreements = calculateTopicOntologyConformities(topics, this.actorOntologies);
-		final Map<TopicOntology, Double> envAgreements = calculateTopicOntologyConformities(topics, this.environmentOntologies);
-
-		// select ontology/ontologies
-		final List<TopicOntology> ontologies = this.selectOntologies(this.selectionMethod, actorAgreements, envAgreements);
-
-		// maybe save the selected (and merged) ontology
-		final OWLOntologyManager owlManager = OWLManager.createOWLOntologyManager();
-		final OWLOntology merged = this.mergeOntologies(owlManager, ontologies);
-		final String mergeId = this.getMergedOntoIdentificator(ontologies);
-		final String filename = this.outputFolder + "merged_" + mergeId + ".owl";
-		final File file = new File(filename);
-		this.saveOntologyToFile(owlManager, merged, file);
-
-		return new Pair<>(merged, filename);
+	private INode getOrCreateOntologyNode() {
+		final INodeType nodeType = this.graph.getNodeType(ONTOLOGY_NODE_TYPE);
+		final List<INode> ontologyNodes = this.graph.getNodesOfType(nodeType);
+		if (ontologyNodes.isEmpty()) {
+			return this.graph.createNode(nodeType);
+		} else if (ontologyNodes.size() > 1) {
+			for (int i = 1; i < ontologyNodes.size(); i++) {
+				this.graph.deleteNode(ontologyNodes.get(i));
+			}
+		}
+		return ontologyNodes.get(0);
 	}
 
 	private List<TopicOntology> selectOntologies(SelectionMethod selectionMethod, Map<TopicOntology, Double> actorAgreements,

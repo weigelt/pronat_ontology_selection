@@ -37,6 +37,7 @@ public class SimpleOntologySelectorTest {
 		ontoSelector.exec(topics);
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testHeatingOneOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -44,6 +45,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "heating1.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testHeatingOneTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -53,6 +55,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "heating1.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testHeatingTwoOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -62,7 +65,9 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "heating2.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
+
 	public void testBedroomOneOne() {
 		final List<String> wordSenses = new ArrayList<>();
 		wordSenses.add("closet");
@@ -71,6 +76,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "bedroom1.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testBedroomOneTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -82,6 +88,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "bedroom1.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testBedroomOneThree() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -93,6 +100,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "bedroom1.3");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testMusicOneOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -102,6 +110,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "music1.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testMusicOneTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -110,6 +119,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "music1.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testMusicOneThree() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -118,6 +128,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "music1.3");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testChildrensRoomOneOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -127,6 +138,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "childrensroom1.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testChildrensRoomOneTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -138,6 +150,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "childrensroom1.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testChildrensRoomOneThree() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -150,6 +163,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "childrensroom1.3");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testGardenOneOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -159,6 +173,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "garden1.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testGardenOneTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -168,6 +183,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "garden1.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testGardenOneThree() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -176,6 +192,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "garden1.3");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testGardenOneFour() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -185,6 +202,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "garden1.4");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testGardenOneFive() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -194,6 +212,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "garden1.5");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testBarOneOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -204,6 +223,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "bar1.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testBarOneTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -216,6 +236,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "bar1.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testBarOneThree() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -226,6 +247,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "bar1.3");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testBarOneFour() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -243,6 +265,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "bar1.4");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testBarOneFive() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -252,6 +275,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "bar1.5");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testOneOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -262,6 +286,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "1.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testOneTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -273,6 +298,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "1.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testOneThree() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -284,6 +310,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "1.3");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testTwoOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -292,6 +319,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "2.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testTwoTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -300,6 +328,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "2.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testTwoThree() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -309,6 +338,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "2.3");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testThreeOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -318,6 +348,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "3.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testThreeTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -330,6 +361,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "3.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testThreeThree() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -339,6 +371,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "3.3");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testFourOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -348,6 +381,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "4.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testFourTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -359,6 +393,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "4.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testFourThree() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -371,6 +406,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "4.3");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testIfFourOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -380,6 +416,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "If.4.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testIfFourTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -390,6 +427,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "If.4.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testIfFourThree() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -402,6 +440,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "If.4.3");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testIfFiveOne() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -414,6 +453,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "If.5.1");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testIfFiveTwo() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -425,6 +465,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "If.5.2");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testIfFiveThree() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -437,6 +478,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "If.5.3");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testSSevenPEight() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -456,6 +498,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "s7p08");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testSSevenPNine() {
 		final List<String> wordSenses = new ArrayList<>();
@@ -469,6 +512,7 @@ public class SimpleOntologySelectorTest {
 		this.test(wordSenses, "s7p09");
 	}
 
+	@Ignore("Ignored for performance reasons during build.")
 	@Test
 	public void testSSevenPTen() {
 		final List<String> wordSenses = new ArrayList<>();
