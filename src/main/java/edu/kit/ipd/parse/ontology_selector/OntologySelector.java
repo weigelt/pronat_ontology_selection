@@ -326,8 +326,10 @@ public class OntologySelector extends AbstractAgent {
 		// select ontology/ontologies
 		final List<TopicOntology> ontologies = this.selectOntologies(this.selectionMethod, actorAgreements, envAgreements);
 
-		this.annotateAgreementsToGraph(actorAgreements, envAgreements);
-		this.annotateSelectedOntologiesToGraph(ontologies);
+		if (this.graph != null) {
+			this.annotateAgreementsToGraph(actorAgreements, envAgreements);
+			this.annotateSelectedOntologiesToGraph(ontologies);
+		}
 
 		// maybe save the selected (and merged) ontology
 		final OWLOntologyManager owlManager = OWLManager.createOWLOntologyManager();
@@ -338,7 +340,9 @@ public class OntologySelector extends AbstractAgent {
 		this.saveOntologyToFile(owlManager, merged, file);
 		final String path = file.getAbsolutePath();
 
-		this.annotateOntologyToGraph(path);
+		if (this.graph != null) {
+			this.annotateOntologyToGraph(path);
+		}
 
 		return new Pair<>(merged, path);
 	}
@@ -574,6 +578,12 @@ public class OntologySelector extends AbstractAgent {
 	private void saveOntologyToFile(OWLOntologyManager owlManager, OWLOntology onto, File file) {
 		if ((onto == null) || (owlManager == null) || (file == null)) {
 			throw new IllegalArgumentException("A provided Argument is null!");
+		}
+		if (!file.exists()) {
+			final File parent = file.getParentFile();
+			if (!parent.exists() && !parent.mkdirs()) {
+				throw new IllegalStateException("Couldn't create dir: " + parent);
+			}
 		}
 
 		try {
