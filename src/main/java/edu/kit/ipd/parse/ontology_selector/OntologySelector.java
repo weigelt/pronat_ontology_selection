@@ -149,7 +149,7 @@ public class OntologySelector extends AbstractAgent {
 	}
 
 	private void loadOntologies(boolean isActor, final ExecutorService executor, String ontologiesPaths) {
-		if (!ontologiesPaths.isEmpty()) {
+		if (ontologiesPaths.isEmpty()) {
 			return;
 		}
 		for (final String ontologyPath : ontologiesPaths.split(",")) {
