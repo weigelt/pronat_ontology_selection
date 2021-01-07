@@ -71,20 +71,20 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-			<groupId>edu.kit.ipd.parse</groupId>
-			<artifactId>ShallowNLP</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>edu.kit.ipd.parse</groupId>
-			<artifactId>graphBuilder</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>edu.kit.ipd.parse</groupId>
-			<artifactId>ner</artifactId>
-			<scope>test</scope>
-		</dependency>
+            <groupId>edu.kit.ipd.parse</groupId>
+            <artifactId>ShallowNLP</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.kit.ipd.parse</groupId>
+            <artifactId>graphBuilder</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.kit.ipd.parse</groupId>
+            <artifactId>ner</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.kohsuke.metainf-services</groupId>
             <artifactId>metainf-services</artifactId>
@@ -94,20 +94,17 @@
             <artifactId>owlapi-distribution</artifactId>
         </dependency>
         <dependency>
-			<groupId>edu.kit.ipd.parse</groupId>
-			<artifactId>topic_extraction_common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.kit.ipd.parse</groupId>
-			<artifactId>topic_extraction</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
+            <groupId>edu.kit.ipd.parse</groupId>
+            <artifactId>topic_extraction_common</artifactId>
+        </dependency>
         <dependency>
-        	<groupId>edu.kit.ipd.parse</groupId>
+            <groupId>edu.kit.ipd.parse</groupId>
+            <artifactId>topic_extraction</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.kit.ipd.parse</groupId>
             <artifactId>wikiWSD</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
