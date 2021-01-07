@@ -77,24 +77,24 @@ public class OntologySelector extends AbstractAgent {
 
 	@Override
 	public void init() {
-		this.setId(ID);
-		this.topicExtraction = new TopicExtractionCore();
-		this.topicExtraction.setNumTopics(NUMBER_OF_TOPICS);
+		setId(ID);
+		topicExtraction = new TopicExtractionCore();
+		topicExtraction.setNumTopics(NUMBER_OF_TOPICS);
 		// save old method to be able to restore later
-		final TopicSelectionMethod oldSM = this.topicExtraction.getTopicSelectionMethod();
+		final TopicSelectionMethod oldSM = topicExtraction.getTopicSelectionMethod();
 		// change to maxConnectivity method
-		this.topicExtraction.setTopicSelectionMethod(TopicSelectionMethod.MaxConnectivity);
+		topicExtraction.setTopicSelectionMethod(TopicSelectionMethod.MaxConnectivity);
 
-		this.actorOntologies = new ArrayList<>();
-		this.environmentOntologies = new ArrayList<>();
+		actorOntologies = new ArrayList<>();
+		environmentOntologies = new ArrayList<>();
 
 		// load ontology-paths from configuration file
-		final Properties props = ConfigManager.getConfiguration(this.getClass());
-		this.loadOntologiesFromConfig(props);
-		this.outputFolder = props.getProperty("OUTPUT", "/");
+		final Properties props = ConfigManager.getConfiguration(getClass());
+		loadOntologiesFromConfig(props);
+		outputFolder = props.getProperty("OUTPUT", "/");
 
 		// restore topic selection method
-		this.topicExtraction.setTopicSelectionMethod(oldSM);
+		topicExtraction.setTopicSelectionMethod(oldSM);
 	}
 
 	/**
@@ -105,19 +105,18 @@ public class OntologySelector extends AbstractAgent {
 	 *            true of saved ontologies should be used
 	 */
 	public void useSavedTopicOntologies(boolean val) {
-		this.useSavedTopicOntologies = val;
+		useSavedTopicOntologies = val;
 	}
 
 	/**
-	 * Sets the {@link TopicExtractionCore} instance that should be used for
-	 * getting the topics for an ontology. Needs to be called BEFORE
-	 * {@link #init()}!
+	 * Sets the {@link TopicExtractionCore} instance that should be used for getting
+	 * the topics for an ontology. Needs to be called BEFORE {@link #init()}!
 	 *
 	 * @param te
 	 *            TopicExtraction instance that should be used
 	 */
 	public void setTopicExtraction(TopicExtractionCore te) {
-		this.topicExtraction = te;
+		topicExtraction = te;
 	}
 
 	/**
@@ -135,9 +134,9 @@ public class OntologySelector extends AbstractAgent {
 		final ExecutorService executor = Executors.newWorkStealingPool();
 		String ontologiesPaths;
 		ontologiesPaths = props.getProperty("ACTOR_ONTOLOGIES", "");
-		this.loadOntologies(true, executor, ontologiesPaths);
+		loadOntologies(true, executor, ontologiesPaths);
 		ontologiesPaths = props.getProperty("ENVIRONMENT_ONTOLOGIES", "");
-		this.loadOntologies(false, executor, ontologiesPaths);
+		loadOntologies(false, executor, ontologiesPaths);
 
 		executor.shutdown();
 		try {
@@ -153,7 +152,7 @@ public class OntologySelector extends AbstractAgent {
 			return;
 		}
 		for (final String ontologyPath : ontologiesPaths.split(",")) {
-			final String path = this.checkPathAndAttemptFixing(ontologyPath);
+			final String path = checkPathAndAttemptFixing(ontologyPath);
 			if (path == null) {
 				logger.warn("Could not load ontology and will skip it: {}", ontologyPath);
 				continue;
@@ -161,10 +160,10 @@ public class OntologySelector extends AbstractAgent {
 
 			if (isActor) {
 				logger.info("Starting to add actor ontology at {}", path);
-				executor.execute(() -> this.registerActorOntology(path));
+				executor.execute(() -> registerActorOntology(path));
 			} else {
 				logger.info("Starting to add environment ontology at {}", path);
-				executor.execute(() -> this.registerEnvironmentOntology(path));
+				executor.execute(() -> registerEnvironmentOntology(path));
 			}
 
 		}
@@ -198,11 +197,11 @@ public class OntologySelector extends AbstractAgent {
 	}
 
 	public boolean registerActorOntology(String path) {
-		return this.registerOntology(path, true);
+		return registerOntology(path, true);
 	}
 
 	public boolean registerEnvironmentOntology(String path) {
-		return this.registerOntology(path, false);
+		return registerOntology(path, false);
 	}
 
 	private boolean registerOntology(String path, boolean isActor) {
@@ -214,7 +213,7 @@ public class OntologySelector extends AbstractAgent {
 		}
 		TopicOntology topicOntology = null;
 		final String savePath = path + ".ossf";
-		if (this.useSavedTopicOntologies && new File(savePath).isFile()) {
+		if (useSavedTopicOntologies && new File(savePath).isFile()) {
 			final Optional<TopicOntology> optTO = TopicOntology.loadFromPath(savePath);
 			if (optTO.isPresent()) {
 				topicOntology = optTO.get();
@@ -230,7 +229,7 @@ public class OntologySelector extends AbstractAgent {
 			}
 			final OWLOntology onto = optOnto.get();
 
-			topicOntology = this.createTopicOntology(path, savePath, onto);
+			topicOntology = createTopicOntology(path, savePath, onto);
 		}
 
 		if (logger.isDebugEnabled()) {
@@ -238,30 +237,30 @@ public class OntologySelector extends AbstractAgent {
 		}
 
 		if (isActor) {
-			return this.actorOntologies.add(topicOntology);
+			return actorOntologies.add(topicOntology);
 		} else {
-			return this.environmentOntologies.add(topicOntology);
+			return environmentOntologies.add(topicOntology);
 		}
 	}
 
 	private TopicOntology createTopicOntology(String path, final String savePath, final OWLOntology onto) {
 		// get wiki-concepts out of ontology
-		final List<String> concepts = this.getConceptsFromOntology(onto);
+		final List<String> concepts = getConceptsFromOntology(onto);
 
 		// do topic extraction
 		TopicGraph tg;
 		List<Topic> ontologyTopics;
-		synchronized (this.topicExtraction) {
+		synchronized (topicExtraction) {
 			if (logger.isDebugEnabled()) {
 				final LocalDateTime currentTime = LocalDateTime.now();
 				logger.debug("{}\tGetting Topics for {}", currentTime.toLocalTime(), path);
 			}
-			tg = this.topicExtraction.getTopicGraphForSenses(concepts);
-			ontologyTopics = this.topicExtraction.getTopicsForTopicGraph(tg, NUMBER_OF_TOPICS);
+			tg = topicExtraction.getTopicGraphForSenses(concepts);
+			ontologyTopics = topicExtraction.getTopicsForTopicGraph(tg, NUMBER_OF_TOPICS);
 		}
 
 		final TopicOntology topicOntology = new TopicOntology(onto, path, ontologyTopics, tg);
-		if (this.useSavedTopicOntologies) {
+		if (useSavedTopicOntologies) {
 			topicOntology.saveToPath(savePath);
 		}
 		return topicOntology;
@@ -282,10 +281,10 @@ public class OntologySelector extends AbstractAgent {
 	private void prepareGraph() {
 		// add graph attribute
 		INodeType tokenType;
-		if (this.graph.hasNodeType(ONTOLOGY_NODE_TYPE)) {
-			tokenType = this.graph.getNodeType(ONTOLOGY_NODE_TYPE);
+		if (graph.hasNodeType(ONTOLOGY_NODE_TYPE)) {
+			tokenType = graph.getNodeType(ONTOLOGY_NODE_TYPE);
 		} else {
-			tokenType = this.graph.createNodeType(ONTOLOGY_NODE_TYPE);
+			tokenType = graph.createNodeType(ONTOLOGY_NODE_TYPE);
 		}
 
 		// Attribute that shows where the merged ontology is (saved to)
@@ -305,14 +304,14 @@ public class OntologySelector extends AbstractAgent {
 
 	@Override
 	protected void exec() {
-		this.prepareGraph();
+		prepareGraph();
 		// get topics out of graph
-		final List<Topic> topics = TopicExtractionCore.getTopicsFromIGraph(this.graph);
+		final List<Topic> topics = TopicExtractionCore.getTopicsFromIGraph(graph);
 		if (topics.isEmpty()) {
 			logger.warn("No annotated topics found. Aborting...");
 			return;
 		}
-		final Pair<OWLOntology, String> mergedOntologyAndPath = this.exec(topics);
+		final Pair<OWLOntology, String> mergedOntologyAndPath = exec(topics);
 		if (logger.isInfoEnabled()) {
 			logger.info("Merged ontology saved to {}", mergedOntologyAndPath.getRight());
 		}
@@ -320,28 +319,28 @@ public class OntologySelector extends AbstractAgent {
 
 	protected Pair<OWLOntology, String> exec(List<Topic> topics) {
 		// compare topics in command with topics from ontologies
-		final Map<TopicOntology, Double> actorAgreements = calculateTopicOntologyConformities(topics, this.actorOntologies);
-		final Map<TopicOntology, Double> envAgreements = calculateTopicOntologyConformities(topics, this.environmentOntologies);
+		final Map<TopicOntology, Double> actorAgreements = calculateTopicOntologyConformities(topics, actorOntologies);
+		final Map<TopicOntology, Double> envAgreements = calculateTopicOntologyConformities(topics, environmentOntologies);
 
 		// select ontology/ontologies
-		final List<TopicOntology> ontologies = this.selectOntologies(this.selectionMethod, actorAgreements, envAgreements);
+		final List<TopicOntology> ontologies = selectOntologies(selectionMethod, actorAgreements, envAgreements);
 
-		if (this.graph != null) {
-			this.annotateAgreementsToGraph(actorAgreements, envAgreements);
-			this.annotateSelectedOntologiesToGraph(ontologies);
+		if (graph != null) {
+			annotateAgreementsToGraph(actorAgreements, envAgreements);
+			annotateSelectedOntologiesToGraph(ontologies);
 		}
 
 		// maybe save the selected (and merged) ontology
 		final OWLOntologyManager owlManager = OWLManager.createOWLOntologyManager();
-		final OWLOntology merged = this.mergeOntologies(owlManager, ontologies);
-		final String mergeId = this.getMergedOntoIdentificator(ontologies);
-		final String filename = this.outputFolder + "merged_" + mergeId + ".owl";
+		final OWLOntology merged = mergeOntologies(owlManager, ontologies);
+		final String mergeId = getMergedOntoIdentificator(ontologies);
+		final String filename = outputFolder + "merged_" + mergeId + ".owl";
 		final File file = new File(filename);
-		this.saveOntologyToFile(owlManager, merged, file);
+		saveOntologyToFile(owlManager, merged, file);
 		final String path = file.getAbsolutePath();
 
-		if (this.graph != null) {
-			this.annotateOntologyToGraph(path);
+		if (graph != null) {
+			annotateOntologyToGraph(path);
 		}
 
 		return new Pair<>(merged, path);
@@ -353,8 +352,8 @@ public class OntologySelector extends AbstractAgent {
 	 *
 	 * @param inputGraph
 	 *            Graph the Ontology shall be extracted from
-	 * @return {@link Optional} with an {@link OWLOntology} if one was annotated
-	 *         or an empty {@link Optional} otherwise
+	 * @return {@link Optional} with an {@link OWLOntology} if one was annotated or
+	 *         an empty {@link Optional} otherwise
 	 */
 	public static Optional<OWLOntology> getOntologyFromIGraph(IGraph inputGraph) {
 		final Optional<OWLOntology> retVal = Optional.empty();
@@ -376,17 +375,17 @@ public class OntologySelector extends AbstractAgent {
 	}
 
 	/**
-	 * Returns the {@link List} of {@link Pair}s containing the selected
-	 * ontologies that were stored in the graph. The pairs consists of two
-	 * strings. The first (left) part contains the id/description of the
-	 * ontology. The second (right) part the path to the ontology.
+	 * Returns the {@link List} of {@link Pair}s containing the selected ontologies
+	 * that were stored in the graph. The pairs consists of two strings. The first
+	 * (left) part contains the id/description of the ontology. The second (right)
+	 * part the path to the ontology.
 	 *
 	 * @param inputGraph
-	 *            Graph with an Ontology Node containing the attribute with
-	 *            selected ontologies
-	 * @return List of Pairs, each Pair contains the description of and path to
-	 *         the ontology. Returns an empty List if any problems occurred
-	 *         (e.g., missing node or attribute)
+	 *            Graph with an Ontology Node containing the attribute with selected
+	 *            ontologies
+	 * @return List of Pairs, each Pair contains the description of and path to the
+	 *         ontology. Returns an empty List if any problems occurred (e.g.,
+	 *         missing node or attribute)
 	 */
 	public static List<Pair<String, String>> getSelectedOntologiesFromIGraph(IGraph inputGraph) {
 		final Optional<INode> optNode = getOntologyNode(inputGraph);
@@ -406,9 +405,9 @@ public class OntologySelector extends AbstractAgent {
 	 *
 	 * @param inputGraph
 	 *            Graph with an Ontology Node containing the agreements
-	 * @return List of Pairs, each Pair contains the description of and
-	 *         agreement for the ontology. Returns an empty List if any problems
-	 *         occurred (e.g., missing node or attribute)
+	 * @return List of Pairs, each Pair contains the description of and agreement
+	 *         for the ontology. Returns an empty List if any problems occurred
+	 *         (e.g., missing node or attribute)
 	 */
 	public static List<Pair<String, Double>> getAgreementsFromIGraph(IGraph inputGraph) {
 		final Optional<INode> optNode = getOntologyNode(inputGraph);
@@ -420,7 +419,6 @@ public class OntologySelector extends AbstractAgent {
 		return unserializeListOfPair(value);
 	}
 
-	@SuppressWarnings("unchecked")
 	private static <T, S> List<Pair<T, S>> unserializeListOfPair(final Object value) {
 		final List<Pair<T, S>> retVal = new ArrayList<>();
 		final List<?> valueList = (List<?>) value;
@@ -452,12 +450,12 @@ public class OntologySelector extends AbstractAgent {
 	}
 
 	private void annotateOntologyToGraph(String path) {
-		final INode node = this.getOrCreateOntologyNode();
+		final INode node = getOrCreateOntologyNode();
 		node.setAttributeValue(ONTOLOGY_PATH_ATTRIBUTE, path);
 	}
 
 	private void annotateAgreementsToGraph(Map<TopicOntology, Double> actorAgreements, Map<TopicOntology, Double> envAgreements) {
-		final INode node = this.getOrCreateOntologyNode();
+		final INode node = getOrCreateOntologyNode();
 		final List<Pair<String, Double>> agreements = new ArrayList<>();
 		for (final Entry<TopicOntology, Double> entry : actorAgreements.entrySet()) {
 			final String id = entry.getKey().getDescription();
@@ -473,7 +471,7 @@ public class OntologySelector extends AbstractAgent {
 	}
 
 	private void annotateSelectedOntologiesToGraph(List<TopicOntology> ontologies) {
-		final INode node = this.getOrCreateOntologyNode();
+		final INode node = getOrCreateOntologyNode();
 		final List<Pair<String, String>> annotationPairs = new ArrayList<>();
 		for (final TopicOntology ontology : ontologies) {
 			final String id = ontology.getDescription();
@@ -496,13 +494,13 @@ public class OntologySelector extends AbstractAgent {
 	}
 
 	private INode getOrCreateOntologyNode() {
-		final INodeType nodeType = this.graph.getNodeType(ONTOLOGY_NODE_TYPE);
-		final List<INode> ontologyNodes = this.graph.getNodesOfType(nodeType);
+		final INodeType nodeType = graph.getNodeType(ONTOLOGY_NODE_TYPE);
+		final List<INode> ontologyNodes = graph.getNodesOfType(nodeType);
 		if (ontologyNodes.isEmpty()) {
-			return this.graph.createNode(nodeType);
+			return graph.createNode(nodeType);
 		} else if (ontologyNodes.size() > 1) {
 			for (int i = 1; i < ontologyNodes.size(); i++) {
-				this.graph.deleteNode(ontologyNodes.get(i));
+				graph.deleteNode(ontologyNodes.get(i));
 			}
 		}
 		return ontologyNodes.get(0);
@@ -515,20 +513,20 @@ public class OntologySelector extends AbstractAgent {
 		// select and add environment ontologies
 		switch (selectionMethod) {
 		case BEST:
-			ontologies.add(this.selectBestOntology(envAgreements));
+			ontologies.add(selectBestOntology(envAgreements));
 			break;
 		case THRESHOLD:
-			ontologies.addAll(this.selectOntologiesByThreshold(envAgreements, this.threshold));
+			ontologies.addAll(selectOntologiesByThreshold(envAgreements, threshold));
 			break;
 		case BEST_AND_SIMILAR:
-			ontologies.addAll(this.selectBestAndSimilarOntologies(envAgreements, 1 - this.threshold));
+			ontologies.addAll(selectBestAndSimilarOntologies(envAgreements, 1 - threshold));
 			break;
 		default:
 			logger.warn("Invalid selection method used!");
 			break;
 		}
 		// add actor ontologies (only the best actor will be selected and therefore added)
-		ontologies.addAll(this.selectActorOntologies(actorAgreements, ontologies));
+		ontologies.addAll(selectActorOntologies(actorAgreements, ontologies));
 
 		// print info about selection
 		if (logger.isDebugEnabled()) {
@@ -552,11 +550,11 @@ public class OntologySelector extends AbstractAgent {
 
 	public void exec(PrePipelineData ppd) {
 		try {
-			this.graph = ppd.getGraph();
+			graph = ppd.getGraph();
 		} catch (final MissingDataException e) {
 			e.printStackTrace();
 		}
-		this.exec();
+		exec();
 	}
 
 	private String getMergedOntoIdentificator(List<TopicOntology> ontologies) {
@@ -572,7 +570,7 @@ public class OntologySelector extends AbstractAgent {
 	private OWLOntology mergeOntologies(OWLOntologyManager owlManager, List<TopicOntology> ontologies) {
 		final OntologyMerger merger = new SimpleOntologyMerger();
 		return merger.merge(owlManager, ontologies,
-				IRI.create("http://www.semanticweb.com/mergedOntology_" + this.getMergedOntoIdentificator(ontologies)));
+				IRI.create("http://www.semanticweb.com/mergedOntology_" + getMergedOntoIdentificator(ontologies)));
 	}
 
 	private void saveOntologyToFile(OWLOntologyManager owlManager, OWLOntology onto, File file) {
@@ -606,7 +604,7 @@ public class OntologySelector extends AbstractAgent {
 	}
 
 	private List<TopicOntology> selectActorOntologies(Map<TopicOntology, Double> conformities, List<TopicOntology> ontologies) {
-		final Set<String> objectClasses = this.getObjectClasses(ontologies);
+		final Set<String> objectClasses = getObjectClasses(ontologies);
 		for (final Map.Entry<TopicOntology, Double> entry : conformities.entrySet()) {
 			double counter = 0;
 			final List<String> dataTypes = entry.getKey().getDataTypes();
@@ -621,7 +619,7 @@ public class OntologySelector extends AbstractAgent {
 		}
 
 		final List<TopicOntology> retList = new ArrayList<>();
-		retList.add(this.selectBestOntology(conformities));
+		retList.add(selectBestOntology(conformities));
 		return retList;
 	}
 
@@ -667,7 +665,7 @@ public class OntologySelector extends AbstractAgent {
 			return new ArrayList<>();
 		}
 		final double currThreshold = bestScore * (thresholdFactor);
-		return this.selectOntologiesByThreshold(conformities, currThreshold);
+		return selectOntologiesByThreshold(conformities, currThreshold);
 	}
 
 	private List<String> getConceptsFromOntology(OWLOntology onto) {

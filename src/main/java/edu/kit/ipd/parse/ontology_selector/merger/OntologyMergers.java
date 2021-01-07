@@ -1,8 +1,8 @@
 package edu.kit.ipd.parse.ontology_selector.merger;
 
 /**
- * Enum representing the different {@link OntologyMerger}s. Use {@link #get()} to get an instance of the
- * {@link OntologyMerger}.
+ * Enum representing the different {@link OntologyMerger}s. Use {@link #get()}
+ * to get an instance of the {@link OntologyMerger}.
  *
  * @author Jan Keim
  *
@@ -17,10 +17,10 @@ public enum OntologyMergers {
 	 */
 	public OntologyMerger get() {
 		switch (this) {
-			case SimpleOntologyMerger:
-				return new SimpleOntologyMerger();
-			default:
-				return new SimpleOntologyMerger();
+		case SimpleOntologyMerger:
+			return new SimpleOntologyMerger();
+		default:
+			return new SimpleOntologyMerger();
 		}
 	}
 }

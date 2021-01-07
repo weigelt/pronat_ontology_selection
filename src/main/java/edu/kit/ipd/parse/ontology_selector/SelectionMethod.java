@@ -8,5 +8,5 @@ package edu.kit.ipd.parse.ontology_selector;
  *
  */
 public enum SelectionMethod {
-	BEST, THRESHOLD, BEST_AND_SIMILAR;
+	BEST, THRESHOLD, BEST_AND_SIMILAR
 }

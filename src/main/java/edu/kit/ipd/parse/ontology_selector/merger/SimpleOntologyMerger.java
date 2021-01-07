@@ -29,8 +29,9 @@ import org.slf4j.LoggerFactory;
 import edu.kit.ipd.parse.ontology_selector.TopicOntology;
 
 /**
- * Simple {@link OntologyMerger} that throws all axioms and ImportsDeclarations into a new Ontology and renames the
- * IRI's. Works fine, if equal concepts have equal names. Otherwise it won't be great.
+ * Simple {@link OntologyMerger} that throws all axioms and ImportsDeclarations
+ * into a new Ontology and renames the IRI's. Works fine, if equal concepts have
+ * equal names. Otherwise it won't be great.
  *
  * @author Jan Keim
  *
@@ -41,8 +42,9 @@ public class SimpleOntologyMerger extends OntologyMerger {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see im.janke.ontologySelector.merger.OntologyMerger#merge(org.semanticweb.owlapi.model.OWLOntologyManager,
-	 * java.util.List, org.semanticweb.owlapi.model.IRI)
+	 * @see
+	 * im.janke.ontologySelector.merger.OntologyMerger#merge(org.semanticweb.owlapi.
+	 * model.OWLOntologyManager, java.util.List, org.semanticweb.owlapi.model.IRI)
 	 */
 	@Override
 	public OWLOntology merge(OWLOntologyManager owlManager, List<TopicOntology> ontologies, IRI iri) {
@@ -55,14 +57,12 @@ public class SimpleOntologyMerger extends OntologyMerger {
 			for (TopicOntology ontology : ontologies) {
 				IRI t_iri = IRI.create(new File(ontology.getOntologyPath()).toURI());
 				OWLOntology onto = owlManager.loadOntologyFromOntologyDocument(t_iri);
-				onto.axioms().forEach(axiom ->
-					{
-						axioms.add(axiom);
-					});
-				onto.importsDeclarations().forEach(impDecl ->
-					{
-						imports.add(impDecl);
-					});
+				onto.axioms().forEach(axiom -> {
+					axioms.add(axiom);
+				});
+				onto.importsDeclarations().forEach(impDecl -> {
+					imports.add(impDecl);
+				});
 				owlManager.removeOntology(onto);
 			}
 
@@ -105,15 +105,14 @@ public class SimpleOntologyMerger extends OntologyMerger {
 				String clazzName = clazz.getIRI().getShortForm().toLowerCase();
 				if (clazzName.equalsIgnoreCase(individualName)) {
 					// case 1: direct match of names
-					merged.classAssertionAxioms(clazz).flatMap(a -> a.individualsInSignature()).forEach(other -> merged
-							.add(createObjectPropertyAssertionAxiom(owlManager, iri, individual, other)));
-				} else if (getHammingDistance(clazzName,
-						individualName) < (Math.min(clazzName.length(), individualName.length()) * 0.20)) {
+					merged.classAssertionAxioms(clazz).flatMap(a -> a.individualsInSignature())
+							.forEach(other -> merged.add(createObjectPropertyAssertionAxiom(owlManager, iri, individual, other)));
+				} else if (getHammingDistance(clazzName, individualName) < (Math.min(clazzName.length(), individualName.length()) * 0.20)) {
 					// case 2: hamming distance is smaller than 20% of length of shorter String. This is dumb, but
 					// better than nothing
 					logger.debug("Connecting " + individualName + " with " + clazzName);
-					merged.classAssertionAxioms(clazz).flatMap(a -> a.individualsInSignature()).forEach(other -> merged
-							.add(createObjectPropertyAssertionAxiom(owlManager, iri, individual, other)));
+					merged.classAssertionAxioms(clazz).flatMap(a -> a.individualsInSignature())
+							.forEach(other -> merged.add(createObjectPropertyAssertionAxiom(owlManager, iri, individual, other)));
 				}
 			}
 		}
@@ -148,8 +147,7 @@ public class SimpleOntologyMerger extends OntologyMerger {
 		return axiom;
 	}
 
-	private OWLObjectPropertyRangeAxiom createObjectPropertyRangeAxiom(OWLOntologyManager owlManager, IRI iri,
-			OWLClass clazz) {
+	private OWLObjectPropertyRangeAxiom createObjectPropertyRangeAxiom(OWLOntologyManager owlManager, IRI iri, OWLClass clazz) {
 		OWLObjectPropertyRangeAxiom axiom = null;
 		OWLDataFactory df = owlManager.getOWLDataFactory();
 		OWLObjectProperty objectProperty = df.getOWLObjectProperty(IRI.create(iri.getIRIString(), "#typeToObject"));
@@ -157,8 +155,7 @@ public class SimpleOntologyMerger extends OntologyMerger {
 		return axiom;
 	}
 
-	private OWLObjectPropertyDomainAxiom createObjectPropertyDomainAxiom(OWLOntologyManager owlManager, IRI iri,
-			OWLClass clazz) {
+	private OWLObjectPropertyDomainAxiom createObjectPropertyDomainAxiom(OWLOntologyManager owlManager, IRI iri, OWLClass clazz) {
 		OWLObjectPropertyDomainAxiom axiom = null;
 		OWLDataFactory df = owlManager.getOWLDataFactory();
 		OWLObjectProperty objectProperty = df.getOWLObjectProperty(IRI.create(iri.getIRIString(), "#typeToObject"));
@@ -166,37 +163,25 @@ public class SimpleOntologyMerger extends OntologyMerger {
 		return axiom;
 	}
 
-	@SuppressWarnings("unused")
 	private void renameIndividuals(OWLOntologyManager owlManager, List<TopicOntology> ontologies, IRI iri) {
-		OWLEntityRenamer renamer = new OWLEntityRenamer(owlManager,
-				owlManager.ontologies().collect(Collectors.toList()));
+		OWLEntityRenamer renamer = new OWLEntityRenamer(owlManager, owlManager.ontologies().collect(Collectors.toList()));
 		for (TopicOntology ontology : ontologies) {
-			ontology.getOntology().individualsInSignature().forEach(individual ->
-				{
-					IRI individualName = IRI
-							.create(individual.getIRI().toString().replaceFirst("[^*]+(?=#|;)", iri.toString()));
-					owlManager.applyChanges(renamer.changeIRI(individual.getIRI(), individualName));
-				});
+			ontology.getOntology().individualsInSignature().forEach(individual -> {
+				IRI individualName = IRI.create(individual.getIRI().toString().replaceFirst("[^*]+(?=#|;)", iri.toString()));
+				owlManager.applyChanges(renamer.changeIRI(individual.getIRI(), individualName));
+			});
 		}
 	}
 
 	private void renameAll(OWLOntologyManager owlManager, List<TopicOntology> ontologies, IRI iri) {
-		OWLEntityRenamer renamer = new OWLEntityRenamer(owlManager,
-				owlManager.ontologies().collect(Collectors.toList()));
+		OWLEntityRenamer renamer = new OWLEntityRenamer(owlManager, owlManager.ontologies().collect(Collectors.toList()));
 		for (TopicOntology ontology : ontologies) {
-			ontology.getOntology()
-					.axioms()
-					.flatMap(a -> a.components())
-					.filter(c -> c instanceof OWLNamedObject)
+			ontology.getOntology().axioms().flatMap(a -> a.components()).filter(c -> c instanceof OWLNamedObject)
 					.map(c -> (OWLNamedObject) c)
-					.filter(no -> !no.getIRI().toString().contains("w3.org")
-							&& !no.getIRI().toString().contains("Thing"))
-					.forEach(obj ->
-						{
-							IRI individualName = IRI
-									.create(obj.getIRI().toString().replaceFirst("[^*]+(?=#|;)", iri.toString()));
-							owlManager.applyChanges(renamer.changeIRI(obj.getIRI(), individualName));
-						});
+					.filter(no -> !no.getIRI().toString().contains("w3.org") && !no.getIRI().toString().contains("Thing")).forEach(obj -> {
+						IRI individualName = IRI.create(obj.getIRI().toString().replaceFirst("[^*]+(?=#|;)", iri.toString()));
+						owlManager.applyChanges(renamer.changeIRI(obj.getIRI(), individualName));
+					});
 		}
 	}
 }
