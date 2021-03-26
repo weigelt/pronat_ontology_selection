@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontology_selector;
+package edu.kit.ipd.pronat.ontology_selector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +7,12 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.kit.ipd.parse.topic_extraction_common.Topic;
-import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;
+import edu.kit.ipd.pronat.topic_extraction_common.Topic;
+import edu.kit.ipd.pronat.topic_extraction_common.TopicExtractionCore;
 
 /**
  * @author Jan Keim
+ * @author Sebastian Weigelt
  *
  */
 @Ignore

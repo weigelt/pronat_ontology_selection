@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontology_selector;
+package edu.kit.ipd.pronat.ontology_selector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +9,12 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.kit.ipd.parse.topic_extraction_common.Topic;
-import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;
+import edu.kit.ipd.pronat.topic_extraction_common.Topic;
+import edu.kit.ipd.pronat.topic_extraction_common.TopicExtractionCore;
 
 /**
  * @author Jan Keim
+ * @author Sebastian Weigelt
  *
  */
 @Ignore
@@ -42,7 +43,7 @@ public class SimpleOntologySelectorTest {
 	public void testHeatingOneOne() {
 		final List<String> wordSenses = new ArrayList<>();
 		wordSenses.add("radiator");
-		this.test(wordSenses, "heating1.1");
+		test(wordSenses, "heating1.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -52,7 +53,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("temperature");
 		wordSenses.add("air conditioning"); // TODO
 		wordSenses.add("degree");
-		this.test(wordSenses, "heating1.2");
+		test(wordSenses, "heating1.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -62,7 +63,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("radiator");
 		wordSenses.add("thermostat");
 		wordSenses.add("temperature");
-		this.test(wordSenses, "heating2.1");
+		test(wordSenses, "heating2.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -73,7 +74,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("closet");
 		wordSenses.add("sweater");
 		wordSenses.add("trousers");
-		this.test(wordSenses, "bedroom1.1");
+		test(wordSenses, "bedroom1.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -85,7 +86,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("task (project management)");
 		wordSenses.add("book");
 		wordSenses.add("shelf (storage)");
-		this.test(wordSenses, "bedroom1.2");
+		test(wordSenses, "bedroom1.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -97,7 +98,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("pillow");
 		wordSenses.add("bed");
 		wordSenses.add("bed sheet");
-		this.test(wordSenses, "bedroom1.3");
+		test(wordSenses, "bedroom1.3");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -107,7 +108,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("heavy metal music");
 		wordSenses.add("playlist");
 		wordSenses.add("sequence"); // for "order"...
-		this.test(wordSenses, "music1.1");
+		test(wordSenses, "music1.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -116,7 +117,7 @@ public class SimpleOntologySelectorTest {
 		final List<String> wordSenses = new ArrayList<>();
 		wordSenses.add("song");
 		wordSenses.add("composer");
-		this.test(wordSenses, "music1.2");
+		test(wordSenses, "music1.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -125,7 +126,7 @@ public class SimpleOntologySelectorTest {
 		final List<String> wordSenses = new ArrayList<>();
 		wordSenses.add("songwriter");
 		wordSenses.add("piano");
-		this.test(wordSenses, "music1.3");
+		test(wordSenses, "music1.3");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -135,7 +136,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("doll");
 		wordSenses.add("action figure");
 		wordSenses.add("cabinetry");
-		this.test(wordSenses, "childrensroom1.1");
+		test(wordSenses, "childrensroom1.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -147,7 +148,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("carpet");
 		wordSenses.add("rattle");
 		wordSenses.add("rattle");
-		this.test(wordSenses, "childrensroom1.2");
+		test(wordSenses, "childrensroom1.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -160,7 +161,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("brick");
 		wordSenses.add("structure");
 		wordSenses.add("dollhouse");
-		this.test(wordSenses, "childrensroom1.3");
+		test(wordSenses, "childrensroom1.3");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -170,7 +171,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("lawn");
 		wordSenses.add("mower");
 		wordSenses.add("grass");
-		this.test(wordSenses, "garden1.1");
+		test(wordSenses, "garden1.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -180,7 +181,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("shed");
 		wordSenses.add("mower");
 		wordSenses.add("lawn");
-		this.test(wordSenses, "garden1.2");
+		test(wordSenses, "garden1.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -189,7 +190,7 @@ public class SimpleOntologySelectorTest {
 		final List<String> wordSenses = new ArrayList<>();
 		wordSenses.add("tree");
 		wordSenses.add("hedge");
-		this.test(wordSenses, "garden1.3");
+		test(wordSenses, "garden1.3");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -199,7 +200,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("saw");
 		wordSenses.add("table (furniture)");
 		wordSenses.add("table (furniture)");
-		this.test(wordSenses, "garden1.4");
+		test(wordSenses, "garden1.4");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -209,7 +210,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("tank");
 		wordSenses.add("rake");
 		wordSenses.add("shed");
-		this.test(wordSenses, "garden1.5");
+		test(wordSenses, "garden1.5");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -220,7 +221,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("tonic water");
 		wordSenses.add("glass (drinkware)");
 		wordSenses.add("gin");
-		this.test(wordSenses, "bar1.1");
+		test(wordSenses, "bar1.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -233,7 +234,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("lime (fruit)");
 		wordSenses.add("juice");
 		wordSenses.add("glass (drinkware)");
-		this.test(wordSenses, "bar1.2");
+		test(wordSenses, "bar1.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -244,7 +245,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("champagne");
 		wordSenses.add("glass");
 		wordSenses.add("counter (furniture)");
-		this.test(wordSenses, "bar1.3");
+		test(wordSenses, "bar1.3");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -262,7 +263,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("cocktail");
 		wordSenses.add("glass (drinkware)");
 		wordSenses.add("counter (furniture)");
-		this.test(wordSenses, "bar1.4");
+		test(wordSenses, "bar1.4");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -272,7 +273,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("table (furniture)");
 		wordSenses.add("beer");
 		wordSenses.add("table (furniture)");
-		this.test(wordSenses, "bar1.5");
+		test(wordSenses, "bar1.5");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -283,7 +284,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("popcorn");
 		wordSenses.add("popcorn");
 		wordSenses.add("hand");
-		this.test(wordSenses, "1.1");
+		test(wordSenses, "1.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -295,7 +296,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("dishwasher");
 		wordSenses.add("cup");
 		wordSenses.add("dishwasher");
-		this.test(wordSenses, "1.2");
+		test(wordSenses, "1.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -307,7 +308,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("juice");
 		wordSenses.add("refrigerator");
 		wordSenses.add("juice");
-		this.test(wordSenses, "1.3");
+		test(wordSenses, "1.3");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -316,7 +317,7 @@ public class SimpleOntologySelectorTest {
 		final List<String> wordSenses = new ArrayList<>();
 		wordSenses.add("popcorn");
 		wordSenses.add("bag");
-		this.test(wordSenses, "2.1");
+		test(wordSenses, "2.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -325,7 +326,7 @@ public class SimpleOntologySelectorTest {
 		final List<String> wordSenses = new ArrayList<>();
 		wordSenses.add("cup");
 		wordSenses.add("dishwasher");
-		this.test(wordSenses, "2.2");
+		test(wordSenses, "2.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -335,7 +336,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("orange (fruit)");
 		wordSenses.add("juice");
 		wordSenses.add("refrigerator");
-		this.test(wordSenses, "2.3");
+		test(wordSenses, "2.3");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -345,7 +346,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("popcorn");
 		wordSenses.add("kitchen");
 		wordSenses.add("table (furniture)");
-		this.test(wordSenses, "3.1");
+		test(wordSenses, "3.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -358,7 +359,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("dishwasher");
 		wordSenses.add("cup");
 		wordSenses.add("dishwasher");
-		this.test(wordSenses, "3.2");
+		test(wordSenses, "3.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -368,7 +369,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("refrigerator");
 		wordSenses.add("orange (fruit)");
 		wordSenses.add("juice");
-		this.test(wordSenses, "3.3");
+		test(wordSenses, "3.3");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -378,7 +379,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("table (furniture)");
 		wordSenses.add("popcorn");
 		wordSenses.add("bag");
-		this.test(wordSenses, "4.1");
+		test(wordSenses, "4.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -390,7 +391,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("dishwasher");
 		wordSenses.add("dishwasher");
 		wordSenses.add("dishwasher");
-		this.test(wordSenses, "4.2");
+		test(wordSenses, "4.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -403,7 +404,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("refrigerator");
 		wordSenses.add("orange (fruit)");
 		wordSenses.add("juice");
-		this.test(wordSenses, "4.3");
+		test(wordSenses, "4.3");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -413,7 +414,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("dishware");
 		wordSenses.add("dishwasher");
 		wordSenses.add("cupboard");
-		this.test(wordSenses, "If.4.1");
+		test(wordSenses, "If.4.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -424,7 +425,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("dishware");
 		wordSenses.add("dishwasher");
 		wordSenses.add("cupboard");
-		this.test(wordSenses, "If.4.2");
+		test(wordSenses, "If.4.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -437,7 +438,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("dishwasher");
 		wordSenses.add("dishwasher");
 		wordSenses.add("cupboard");
-		this.test(wordSenses, "If.4.3");
+		test(wordSenses, "If.4.3");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -450,7 +451,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("orange (fruit)");
 		wordSenses.add("juice");
 		wordSenses.add("vodka");
-		this.test(wordSenses, "If.5.1");
+		test(wordSenses, "If.5.1");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -462,7 +463,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("vodka");
 		wordSenses.add("orange (fruit)");
 		wordSenses.add("juice");
-		this.test(wordSenses, "If.5.2");
+		test(wordSenses, "If.5.2");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -475,7 +476,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("orange (fruit)");
 		wordSenses.add("orange (fruit)");
 		wordSenses.add("juice");
-		this.test(wordSenses, "If.5.3");
+		test(wordSenses, "If.5.3");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -495,7 +496,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("microwave");
 		wordSenses.add("door");
 		wordSenses.add("table (furniture)");
-		this.test(wordSenses, "s7p08");
+		test(wordSenses, "s7p08");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -509,7 +510,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("plate (dishware)");
 		wordSenses.add("microwave");
 		wordSenses.add("table (furniture)");
-		this.test(wordSenses, "s7p09");
+		test(wordSenses, "s7p09");
 	}
 
 	@Ignore("Ignored for performance reasons during build.")
@@ -529,7 +530,7 @@ public class SimpleOntologySelectorTest {
 		wordSenses.add("plate (dishware)");
 		wordSenses.add("plate (dishware)");
 		wordSenses.add("table (furniture)");
-		this.test(wordSenses, "s7p10");
+		test(wordSenses, "s7p10");
 	}
 
 }

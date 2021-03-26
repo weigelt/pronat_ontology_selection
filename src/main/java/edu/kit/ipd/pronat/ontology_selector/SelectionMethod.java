@@ -1,10 +1,11 @@
 /**
  *
  */
-package edu.kit.ipd.parse.ontology_selector;
+package edu.kit.ipd.pronat.ontology_selector;
 
 /**
  * @author Jan Keim
+ * @author Sebastian Weigelt
  *
  */
 public enum SelectionMethod {

@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontology_selector;
+package edu.kit.ipd.pronat.ontology_selector;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +22,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import edu.kit.ipd.pronat.ontology_selector.extractors.WikiConceptExtractor;
+import edu.kit.ipd.pronat.ontology_selector.merger.OntologyMerger;
+import edu.kit.ipd.pronat.ontology_selector.merger.SimpleOntologyMerger;
 import org.apache.commons.lang3.text.WordUtils;
 import org.kohsuke.MetaInfServices;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -34,23 +37,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.kit.ipd.parse.luna.agent.AbstractAgent;
-import edu.kit.ipd.parse.luna.data.MissingDataException;
-import edu.kit.ipd.parse.luna.data.PrePipelineData;
 import edu.kit.ipd.parse.luna.graph.IGraph;
 import edu.kit.ipd.parse.luna.graph.INode;
 import edu.kit.ipd.parse.luna.graph.INodeType;
 import edu.kit.ipd.parse.luna.graph.Pair;
 import edu.kit.ipd.parse.luna.tools.ConfigManager;
-import edu.kit.ipd.parse.ontology_selector.extractors.WikiConceptExtractor;
-import edu.kit.ipd.parse.ontology_selector.merger.OntologyMerger;
-import edu.kit.ipd.parse.ontology_selector.merger.SimpleOntologyMerger;
-import edu.kit.ipd.parse.topic_extraction_common.Topic;
-import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;
-import edu.kit.ipd.parse.topic_extraction_common.TopicSelectionMethod;
-import edu.kit.ipd.parse.topic_extraction_common.graph.TopicGraph;
+import edu.kit.ipd.pronat.topic_extraction_common.Topic;
+import edu.kit.ipd.pronat.topic_extraction_common.TopicExtractionCore;
+import edu.kit.ipd.pronat.topic_extraction_common.TopicSelectionMethod;
+import edu.kit.ipd.pronat.topic_extraction_common.graph.TopicGraph;
 
 /**
  * @author Jan Keim
+ * @author Sebastian Weigelt
  *
  */
 @MetaInfServices(AbstractAgent.class)
@@ -546,15 +545,6 @@ public class OntologySelector extends AbstractAgent {
 			logger.info(strBuilder.toString());
 		}
 		return ontologies;
-	}
-
-	public void exec(PrePipelineData ppd) {
-		try {
-			graph = ppd.getGraph();
-		} catch (final MissingDataException e) {
-			e.printStackTrace();
-		}
-		exec();
 	}
 
 	private String getMergedOntoIdentificator(List<TopicOntology> ontologies) {

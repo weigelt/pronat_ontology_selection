@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontology_selector.extractors;
+package edu.kit.ipd.pronat.ontology_selector.extractors;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,6 +8,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 /**
  * @author Jan Keim
+ * @author Sebastian Weigelt
  *
  */
 public class WikiConceptExtractor {

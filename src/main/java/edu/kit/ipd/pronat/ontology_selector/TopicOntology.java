@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontology_selector;
+package edu.kit.ipd.pronat.ontology_selector;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,12 +27,13 @@ import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.kit.ipd.parse.topic_extraction_common.Topic;
-import edu.kit.ipd.parse.topic_extraction_common.graph.TopicGraph;
-import edu.kit.ipd.parse.topic_extraction_common.graph.WikiVertex;
+import edu.kit.ipd.pronat.topic_extraction_common.Topic;
+import edu.kit.ipd.pronat.topic_extraction_common.graph.TopicGraph;
+import edu.kit.ipd.pronat.topic_extraction_common.graph.WikiVertex;
 
 /**
  * @author Jan Keim
+ * @author Sebastian Weigelt
  *
  */
 public class TopicOntology implements Serializable {

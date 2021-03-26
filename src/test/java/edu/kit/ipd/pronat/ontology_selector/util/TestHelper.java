@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontology_selector.util;
+package edu.kit.ipd.pronat.ontology_selector.util;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  * by Tobias Hey
  *
  * @author Jan Keim
+ * @author Sebastian Weigelt
  *
  */
 public class TestHelper {
@@ -29,7 +30,8 @@ public class TestHelper {
 				.withIsGetterVisibility(Visibility.NONE));
 
 		try {
-			final TypeReference<HashMap<String, Text>> type = new TypeReference<>() {};
+			final TypeReference<HashMap<String, Text>> type = new TypeReference<>() {
+			};
 			TestHelper.texts = objectMapper.readValue(TestHelper.class.getResourceAsStream("/korpus.json"), type);
 		} catch (final IOException e) {
 			e.printStackTrace();
@@ -42,12 +44,12 @@ public class TestHelper {
 	 * DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 	 * DocumentBuilder dBuilder = dbFactory.newDocumentBuilder(); Document doc =
 	 * dBuilder.parse(file); NodeList nl = doc.getElementsByTagName("text"); for
-	 * (int i = 0; i < nl.getLength(); i++) { Element node = (Element)
-	 * nl.item(i); String name = node.getAttribute("name"); String text =
+	 * (int i = 0; i < nl.getLength(); i++) { Element node = (Element) nl.item(i);
+	 * String name = node.getAttribute("name"); String text =
 	 * node.getTextContent().trim(); List<String[]> refs = new ArrayList<>();
 	 * NodeList wsd = node.getElementsByTagName("wsd"); for (int j = 0; j <
-	 * wsd.getLength(); j++) { Element wsdNode = (Element) wsd.item(j); String[]
-	 * ref = new String[] { wsdNode.getAttribute("position"),
+	 * wsd.getLength(); j++) { Element wsdNode = (Element) wsd.item(j); String[] ref
+	 * = new String[] { wsdNode.getAttribute("position"),
 	 * wsdNode.getAttribute("word"), wsdNode.getAttribute("meaning"),
 	 * wsdNode.getAttribute("meaningSyn") }; refs.add(ref); }
 	 * TestHelper.texts.put(name, new Text(text, refs)); } } catch

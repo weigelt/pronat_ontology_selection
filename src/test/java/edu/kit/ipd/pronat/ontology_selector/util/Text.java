@@ -1,7 +1,7 @@
 /**
  *
  */
-package edu.kit.ipd.parse.ontology_selector.util;
+package edu.kit.ipd.pronat.ontology_selector.util;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import java.util.List;
  * Hey
  *
  * @author Jan Keim
+ * @author Sebastian Weigelt
  *
  */
 public class Text {
@@ -17,15 +18,15 @@ public class Text {
 	private List<String[]> annotations;
 
 	Text(String text, List<String[]> annotations) {
-		this.setText(text);
-		this.setRefs(annotations);
+		setText(text);
+		setRefs(annotations);
 	}
 
 	/**
 	 * @return the text
 	 */
 	public String getText() {
-		return this.text;
+		return text;
 	}
 
 	/**
@@ -40,12 +41,12 @@ public class Text {
 	 * @return the refs
 	 */
 	public List<String[]> getAnnotations() {
-		return this.annotations;
+		return annotations;
 	}
 
 	/**
-	 * @param refs
-	 *            the refs to set
+	 * @param annotations
+	 *            the annotations to set
 	 */
 	private void setRefs(List<String[]> annotations) {
 		this.annotations = annotations;

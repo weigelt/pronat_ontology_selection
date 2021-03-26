@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontology_selector;
+package edu.kit.ipd.pronat.ontology_selector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +9,12 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.kit.ipd.parse.topic_extraction_common.Topic;
-import edu.kit.ipd.parse.topic_extraction_common.TopicExtractionCore;
+import edu.kit.ipd.pronat.topic_extraction_common.Topic;
+import edu.kit.ipd.pronat.topic_extraction_common.TopicExtractionCore;
 
 /**
  * @author Jan Keim
+ * @author Sebastian Weigelt
  *
  */
 @Ignore
@@ -48,7 +49,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("popcorn");
 		wordSenses.add("popcorn");
 		wordSenses.add("hand");
-		this.test(wordSenses, "1.1");
+		test(wordSenses, "1.1");
 	}
 
 	@Test
@@ -56,7 +57,7 @@ public class SimpleOntologySelectorEval {
 		final List<String> wordSenses = new ArrayList<>();
 		wordSenses.add("popcorn");
 		wordSenses.add("bag");
-		this.test(wordSenses, "2.1");
+		test(wordSenses, "2.1");
 	}
 
 	// 2
@@ -66,7 +67,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("table (furniture)");
 		wordSenses.add("cup");
 		wordSenses.add("dishwasher");
-		this.test(wordSenses, "18.2");
+		test(wordSenses, "18.2");
 	}
 
 	@Test
@@ -76,7 +77,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("kitchen");
 		wordSenses.add("table (furniture)");
 		wordSenses.add("dishwasher");
-		this.test(wordSenses, "31.2");
+		test(wordSenses, "31.2");
 	}
 
 	// 3
@@ -86,7 +87,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("refrigerator");
 		wordSenses.add("orange (fruit)");
 		wordSenses.add("juice");
-		this.test(wordSenses, "3.3");
+		test(wordSenses, "3.3");
 	}
 
 	@Test
@@ -98,7 +99,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("refrigerator");
 		wordSenses.add("orange (fruit)");
 		wordSenses.add("juice");
-		this.test(wordSenses, "25.3");
+		test(wordSenses, "25.3");
 	}
 
 	// 4
@@ -108,7 +109,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("dishware");
 		wordSenses.add("dishwasher");
 		wordSenses.add("cupboard");
-		this.test(wordSenses, "If.4.1");
+		test(wordSenses, "If.4.1");
 	}
 
 	@Test
@@ -129,7 +130,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("cupboard");
 		wordSenses.add("dishware");
 		wordSenses.add("cupboard");
-		this.test(wordSenses, "If.4.10");
+		test(wordSenses, "If.4.10");
 	}
 
 	// 5
@@ -144,7 +145,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("orange (fruit)");
 		wordSenses.add("juice");
 		wordSenses.add("vodka");
-		this.test(wordSenses, "If.5.5");
+		test(wordSenses, "If.5.5");
 	}
 
 	@Test
@@ -157,7 +158,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("vodka");
 		wordSenses.add("orange (fruit)");
 		wordSenses.add("juice");
-		this.test(wordSenses, "If.5.12");
+		test(wordSenses, "If.5.12");
 	}
 
 	// 6
@@ -186,7 +187,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("cup");
 		wordSenses.add("shelf (storage)");
 		wordSenses.add("cupboard");
-		this.test(wordSenses, "s6p03");
+		test(wordSenses, "s6p03");
 	}
 
 	@Test
@@ -207,7 +208,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("cup");
 		wordSenses.add("dishwasher");
 		wordSenses.add("cupboard");
-		this.test(wordSenses, "s6p10");
+		test(wordSenses, "s6p10");
 	}
 
 	// 7
@@ -227,7 +228,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("microwave");
 		wordSenses.add("door");
 		wordSenses.add("table (furniture)");
-		this.test(wordSenses, "s7p08");
+		test(wordSenses, "s7p08");
 	}
 
 	@Test
@@ -245,7 +246,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("plate (dishware)");
 		wordSenses.add("plate (dishware)");
 		wordSenses.add("table (furniture)");
-		this.test(wordSenses, "s7p10");
+		test(wordSenses, "s7p10");
 	}
 
 	// 8
@@ -257,7 +258,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("laundry");
 		wordSenses.add("clothes dryer");
 		wordSenses.add("clothes dryer");
-		this.test(wordSenses, "s8p01");
+		test(wordSenses, "s8p01");
 	}
 
 	@Test
@@ -278,7 +279,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("clothes dryer");
 		wordSenses.add("push-button");
 		wordSenses.add("clothes dryer");
-		this.test(wordSenses, "s8p06");
+		test(wordSenses, "s8p06");
 	}
 
 	// 9
@@ -292,7 +293,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("pond");
 		wordSenses.add("pond");
 		wordSenses.add("lawn");
-		this.test(wordSenses, "drone1.1");
+		test(wordSenses, "drone1.1");
 	}
 
 	@Test
@@ -304,7 +305,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("greenhouse");
 		wordSenses.add("pond");
 		wordSenses.add("lawn");
-		this.test(wordSenses, "drone1.2");
+		test(wordSenses, "drone1.2");
 	}
 
 	// 10
@@ -318,7 +319,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("carpet");
 		wordSenses.add("doll");
 		wordSenses.add("doll");
-		this.test(wordSenses, "mindstorm1.1");
+		test(wordSenses, "mindstorm1.1");
 	}
 
 	@Test
@@ -329,7 +330,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("line (geometry)");
 		wordSenses.add("carpet");
 		wordSenses.add("doll");
-		this.test(wordSenses, "mindstorm1.2");
+		test(wordSenses, "mindstorm1.2");
 	}
 
 	// 11
@@ -340,7 +341,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("radiator");
 		wordSenses.add("degree (temperature)");
 		wordSenses.add("playlist");
-		this.test(wordSenses, "alexa1.1");
+		test(wordSenses, "alexa1.1");
 	}
 
 	@Test
@@ -348,7 +349,7 @@ public class SimpleOntologySelectorEval {
 		final List<String> wordSenses = new ArrayList<>();
 		wordSenses.add("playlist");
 		wordSenses.add("radiator");
-		this.test(wordSenses, "alexa1.2");
+		test(wordSenses, "alexa1.2");
 	}
 
 	// extra
@@ -358,7 +359,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("lawn");
 		wordSenses.add("mower");
 		wordSenses.add("grass");
-		this.test(wordSenses, "Garden1.1");
+		test(wordSenses, "Garden1.1");
 	}
 
 	@Test
@@ -367,7 +368,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("shed");
 		wordSenses.add("mower");
 		wordSenses.add("lawn");
-		this.test(wordSenses, "Garden1.2");
+		test(wordSenses, "Garden1.2");
 	}
 
 	@Test
@@ -377,7 +378,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("tonic water");
 		wordSenses.add("glass (drinkware)");
 		wordSenses.add("gin");
-		this.test(wordSenses, "Bar1.1");
+		test(wordSenses, "Bar1.1");
 	}
 
 	@Test
@@ -389,7 +390,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("lime (fruit)");
 		wordSenses.add("juice");
 		wordSenses.add("glass (drinkware)");
-		this.test(wordSenses, "Bar1.2");
+		test(wordSenses, "Bar1.2");
 	}
 
 	@Test
@@ -398,7 +399,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("closet");
 		wordSenses.add("sweater");
 		wordSenses.add("trousers");
-		this.test(wordSenses, "Bedroom1.1");
+		test(wordSenses, "Bedroom1.1");
 	}
 
 	@Test
@@ -409,7 +410,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("task (project management)");
 		wordSenses.add("book");
 		wordSenses.add("shelf (storage)");
-		this.test(wordSenses, "Bedroom1.2");
+		test(wordSenses, "Bedroom1.2");
 	}
 
 	@Test
@@ -417,7 +418,7 @@ public class SimpleOntologySelectorEval {
 		final List<String> wordSenses = new ArrayList<>();
 		wordSenses.add("metal (music)");
 		wordSenses.add("playlist");
-		this.test(wordSenses, "Music1.1");
+		test(wordSenses, "Music1.1");
 	}
 
 	@Test
@@ -425,7 +426,7 @@ public class SimpleOntologySelectorEval {
 		final List<String> wordSenses = new ArrayList<>();
 		wordSenses.add("songwriter");
 		wordSenses.add("piano");
-		this.test(wordSenses, "Music1.3");
+		test(wordSenses, "Music1.3");
 	}
 
 	@Test
@@ -437,7 +438,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("refrigerator");
 		wordSenses.add("beer");
 		wordSenses.add("whiskey");
-		this.test(wordSenses, "JazzBar1.1");
+		test(wordSenses, "JazzBar1.1");
 	}
 
 	@Test
@@ -447,7 +448,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("glass (drinkware)");
 		wordSenses.add("whisky");
 		wordSenses.add("drink");
-		this.test(wordSenses, "JazzBar1.2");
+		test(wordSenses, "JazzBar1.2");
 	}
 
 	@Test
@@ -459,7 +460,7 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("patio table");
 		wordSenses.add("pond");
 		wordSenses.add("lawn");
-		this.test(wordSenses, "KitchenToGarden1.1");
+		test(wordSenses, "KitchenToGarden1.1");
 	}
 
 	@Ignore
@@ -472,6 +473,6 @@ public class SimpleOntologySelectorEval {
 		wordSenses.add("nightstand");
 		wordSenses.add("book");
 		wordSenses.add("bench (furniture)");
-		this.test(wordSenses, "GBMTest1.1");
+		test(wordSenses, "GBMTest1.1");
 	}
 }

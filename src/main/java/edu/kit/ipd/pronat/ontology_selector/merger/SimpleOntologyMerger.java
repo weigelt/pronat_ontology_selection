@@ -1,4 +1,4 @@
-package edu.kit.ipd.parse.ontology_selector.merger;
+package edu.kit.ipd.pronat.ontology_selector.merger;
 
 import java.io.File;
 import java.util.HashSet;
@@ -26,7 +26,7 @@ import org.semanticweb.owlapi.util.OWLEntityRenamer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.kit.ipd.parse.ontology_selector.TopicOntology;
+import edu.kit.ipd.pronat.ontology_selector.TopicOntology;
 
 /**
  * Simple {@link OntologyMerger} that throws all axioms and ImportsDeclarations
@@ -34,18 +34,12 @@ import edu.kit.ipd.parse.ontology_selector.TopicOntology;
  * equal names. Otherwise it won't be great.
  *
  * @author Jan Keim
+ * @author Sebastian Weigelt
  *
  */
 public class SimpleOntologyMerger extends OntologyMerger {
 	private static final Logger logger = LoggerFactory.getLogger(SimpleOntologyMerger.class);
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * im.janke.ontologySelector.merger.OntologyMerger#merge(org.semanticweb.owlapi.
-	 * model.OWLOntologyManager, java.util.List, org.semanticweb.owlapi.model.IRI)
-	 */
 	@Override
 	public OWLOntology merge(OWLOntologyManager owlManager, List<TopicOntology> ontologies, IRI iri) {
 		Set<OWLAxiom> axioms = new HashSet<>();
